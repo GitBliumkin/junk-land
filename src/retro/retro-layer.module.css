@@ -1,0 +1,43 @@
+.retroLayer {
+  min-height: 100vh;
+  width: 100%;
+  background: #008080;
+  font-family: "Comic Sans MS", "Times New Roman", serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.welcomeSprite {
+  position: absolute;
+  top: 80px;
+  left: 60px;
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #ffff00;
+  text-shadow: 2px 2px 0 #ff00ff;
+  background: #000080;
+  border: 4px outset #c0c0c0;
+  padding: 12px 20px;
+  cursor: grab;
+  user-select: none;
+}
+
+.trashBin {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px inset #c0c0c0;
+  background: #808080;
+  border-radius: 8px;
+  z-index: 100;
+}
+
+.trashBinIcon {
+  font-size: 2.5rem;
+  pointer-events: none;
+}
