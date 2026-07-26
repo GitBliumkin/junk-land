@@ -1,4 +1,4 @@
-import { motion, useAnimation, type PanInfo } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 import { type CSSProperties, type ReactNode, type RefObject } from 'react';
 
 interface DraggableJunkProps {
@@ -20,6 +20,18 @@ function isOverBin(point: { x: number; y: number }, bin: HTMLDivElement) {
   );
 }
 
+// The retro layer's stage is scaled via CSS transform to fit the viewport, and framer-motion
+// runs its drag math through `transformPagePoint` to compensate — which also transforms
+// `info.point` into that same unscaled space. `getBoundingClientRect()` is always real screen
+// coordinates, so hit-testing against it needs the *native* event's client point instead.
+function getClientPoint(event: MouseEvent | TouchEvent | PointerEvent): { x: number; y: number } {
+  if ('clientX' in event) {
+    return { x: event.clientX, y: event.clientY };
+  }
+  const touch = event.changedTouches[0] ?? event.touches[0];
+  return { x: touch.clientX, y: touch.clientY };
+}
+
 export default function DraggableJunk({
   id,
   trashBinRef,
@@ -30,12 +42,9 @@ export default function DraggableJunk({
 }: DraggableJunkProps) {
   const controls = useAnimation();
 
-  async function handleDragEnd(
-    _event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
-  ) {
+  async function handleDragEnd(event: MouseEvent | TouchEvent | PointerEvent) {
     const bin = trashBinRef.current;
-    if (bin && isOverBin(info.point, bin)) {
+    if (bin && isOverBin(getClientPoint(event), bin)) {
       await controls.start({
         scale: 0,
         rotate: 180,

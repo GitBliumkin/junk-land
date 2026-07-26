@@ -1,5 +1,6 @@
 .navSection {
   width: 820px;
+  max-width: 100%;
   border: 4px outset var(--retro-color-silver);
   cursor: grab;
   user-select: none;

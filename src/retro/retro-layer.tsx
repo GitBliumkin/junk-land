@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { MotionConfig, correctParentTransform } from 'framer-motion';
 import { useJunkStore } from '../store/junk-store';
 import { JUNK_ITEMS } from '../data/junk-items';
 import TrashBin from './components/trash-bin/trash-bin';
@@ -32,10 +33,21 @@ function itemStyle(id: string, frame?: ColumnFrame): CSSProperties | undefined {
 export default function RetroLayer() {
   const navigate = useNavigate();
   const binRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const sidePanelRef = useRef<HTMLDivElement>(null);
   const sidePanelRightRef = useRef<HTMLDivElement>(null);
   const centerContentRef = useRef<HTMLDivElement>(null);
   const frozenRef = useRef(false);
+  // The stage is scaled via CSS transform to fit the viewport; without this, framer-motion's
+  // drag math runs in unscaled coordinates, so on smaller (more scaled-down) screens dragged
+  // items lag behind the cursor instead of following it 1:1. Built lazily in an effect since
+  // reading the ref must happen outside of render.
+  const [transformPagePoint, setTransformPagePoint] = useState<((point: { x: number; y: number }) => { x: number; y: number }) | undefined>(
+    undefined
+  );
+  useEffect(() => {
+    setTransformPagePoint(() => correctParentTransform(stageRef));
+  }, []);
   const [leftItemTops, setLeftItemTops] = useState<Record<string, number>>({});
   const [rightItemTops, setRightItemTops] = useState<Record<string, number>>({});
   const [binTop, setBinTop] = useState(0);
@@ -255,6 +267,7 @@ export default function RetroLayer() {
   return (
   <div className={styles.retroLayer}>
     <div
+      ref={stageRef}
       className={styles.stage}
       style={
         frozen
@@ -266,38 +279,40 @@ export default function RetroLayer() {
           : undefined
       }
     >
-      <div
-        ref={sidePanelRef}
-        className={styles.sidePanel}
-        style={
-          frozen
-            ? { width: frozen.left.width, height: frozen.left.height, justifySelf: 'end' }
-            : undefined
-        }
-      >
-        {leftItems.map(renderLeftJunk)}
-      </div>
+      <MotionConfig transformPagePoint={transformPagePoint}>
+        <div
+          ref={sidePanelRef}
+          className={styles.sidePanel}
+          style={
+            frozen
+              ? { width: frozen.left.width, height: frozen.left.height, justifySelf: 'end' }
+              : undefined
+          }
+        >
+          {leftItems.map(renderLeftJunk)}
+        </div>
 
-      <div
-        ref={centerContentRef}
-        className={styles.centerContent}
-        style={frozen ? { width: frozen.center.width, height: frozen.center.height } : undefined}
-      >
-        {centerItems.map((item) => renderJunk(item, frozen?.center))}
-      </div>
+        <div
+          ref={centerContentRef}
+          className={styles.centerContent}
+          style={frozen ? { width: frozen.center.width, height: frozen.center.height } : undefined}
+        >
+          {centerItems.map((item) => renderJunk(item, frozen?.center))}
+        </div>
 
-      <div
-        ref={sidePanelRightRef}
-        className={styles.sidePanelRight}
-        style={
-          frozen
-            ? { width: frozen.right.width, height: frozen.right.height, justifySelf: 'start' }
-            : undefined
-        }
-      >
-        {rightItems.map(renderRightJunk)}
-        <TrashBin ref={binRef} style={binStyle} />
-      </div>
+        <div
+          ref={sidePanelRightRef}
+          className={styles.sidePanelRight}
+          style={
+            frozen
+              ? { width: frozen.right.width, height: frozen.right.height, justifySelf: 'start' }
+              : undefined
+          }
+        >
+          {rightItems.map(renderRightJunk)}
+          <TrashBin ref={binRef} style={binStyle} />
+        </div>
+      </MotionConfig>
     </div>
   </div>
 );
