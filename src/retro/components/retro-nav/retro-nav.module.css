@@ -1,0 +1,45 @@
+.retroNav {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+  padding: 10px;
+  background: var(--retro-color-navy);
+  border-bottom: 4px solid var(--retro-color-silver);
+  position: relative;
+  z-index: 10;
+  overflow-x: auto;
+}
+
+.navButton {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  font-family: var(--retro-font-heading);
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: var(--retro-color-navy);
+  background: var(--retro-color-silver);
+  border: 3px outset var(--retro-color-white);
+  cursor: pointer;
+  white-space: nowrap;
+  text-align: center;
+  text-decoration: none;
+}
+
+.navIcon {
+  width: 11px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.navButton:active {
+  border-style: inset;
+}
+
+.navButtonActive {
+  background: var(--retro-color-magenta);
+  color: var(--retro-color-yellow);
+}

@@ -1,0 +1,57 @@
+.trashBin {
+  width: 182px;
+  height: 182px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dragHint {
+  position: absolute;
+  bottom: 80%;
+  right: 45%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.dragHintText {
+  font-family: var(--retro-font-heading);
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: var(--retro-color-red);
+  white-space: nowrap;
+  margin-bottom: 3px;
+}
+
+.dragHintArrow {
+  width: 77px;
+  height: auto;
+}
+
+.trashBinIcon {
+  position: relative;
+  z-index: 1000;
+  height: 168px;
+  width: auto;
+  pointer-events: none;
+  transform-origin: center;
+  animation: binWiggle 6s linear infinite;
+}
+
+@keyframes binWiggle {
+  0% {
+    transform: rotate(0deg);
+    animation-timing-function: ease-in-out;
+  }
+  15% {
+    transform: rotate(30deg);
+    animation-timing-function: ease-in-out;
+  }
+  30%,
+  100% {
+    transform: rotate(0deg);
+  }
+}

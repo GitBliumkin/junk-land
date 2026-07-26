@@ -1,5 +1,5 @@
 import { motion, useAnimation, type PanInfo } from 'framer-motion';
-import { type ReactNode, type RefObject } from 'react';
+import { type CSSProperties, type ReactNode, type RefObject } from 'react';
 
 interface DraggableJunkProps {
   id: string;
@@ -7,6 +7,7 @@ interface DraggableJunkProps {
   onCleared: (id: string) => void;
   children: ReactNode;
   className?: string;
+  style?: CSSProperties;
 }
 
 function isOverBin(point: { x: number; y: number }, bin: HTMLDivElement) {
@@ -25,6 +26,7 @@ export default function DraggableJunk({
   onCleared,
   children,
   className,
+  style,
 }: DraggableJunkProps) {
   const controls = useAnimation();
 
@@ -55,7 +57,7 @@ export default function DraggableJunk({
       whileDrag={{ scale: 1.08, zIndex: 999, cursor: 'grabbing' }}
       onDragEnd={handleDragEnd}
       animate={controls}
-      style={{ touchAction: 'none' }}
+      style={{ touchAction: 'none', ...style }}
     >
       {children}
     </motion.div>

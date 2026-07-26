@@ -1,0 +1,12 @@
+.welcomeSprite {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--retro-color-yellow);
+  text-shadow: 2px 2px 0 var(--retro-color-magenta);
+  background: var(--retro-color-navy);
+  border: 4px outset var(--retro-color-silver);
+  padding: 12px 20px;
+  cursor: grab;
+  user-select: none;
+  text-align: center;
+}

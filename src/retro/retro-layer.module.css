@@ -1,43 +1,57 @@
 .retroLayer {
   min-height: 100vh;
+  max-height: 100%;
   width: 100%;
-  background: #008080;
-  font-family: "Comic Sans MS", "Times New Roman", serif;
+  background-color: var(--retro-color-teal); /* #008080 */
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.15) 0px,
+      rgba(255, 255, 255, 0.15) 2px,
+      transparent 2px,
+      transparent 8px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.1) 0px,
+      rgba(255, 255, 255, 0.1) 2px,
+      transparent 2px,
+      transparent 8px
+    );
+  font-family: var(--retro-font-body);
   position: relative;
-  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: stretch;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-.welcomeSprite {
-  position: absolute;
-  top: 80px;
-  left: 60px;
-  font-size: 1.6rem;
-  font-weight: bold;
-  color: #ffff00;
-  text-shadow: 2px 2px 0 #ff00ff;
-  background: #000080;
-  border: 4px outset #c0c0c0;
-  padding: 12px 20px;
-  cursor: grab;
-  user-select: none;
-}
-
-.trashBin {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 80px;
-  height: 80px;
+.centerContent {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  border: 4px inset #c0c0c0;
-  background: #808080;
-  border-radius: 8px;
-  z-index: 100;
+  gap: 32px;
+  padding: 60px 24px 140px;
 }
 
-.trashBinIcon {
-  font-size: 2.5rem;
-  pointer-events: none;
+.sidePanel {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0 28px 0 16px;
+}
+
+.sidePanelRight {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-width: 100px;
 }

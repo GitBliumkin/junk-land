@@ -1,0 +1,19 @@
+/* Shared design tokens for the retro layer — colors and fonts only.
+   Component-specific layout/spacing lives in each component's own CSS module. */
+:root {
+  --retro-color-navy: #000080;
+  --retro-color-silver: #c0c0c0;
+  --retro-color-white: #ffffff;
+  --retro-color-gray: #808080;
+  --retro-color-teal: #008080;
+  --retro-color-magenta: #ff00ff;
+  --retro-color-yellow: #ffff00;
+  --retro-color-orange: #ff8c00;
+  --retro-color-red: #ed1b24;
+
+  --retro-text-dark: #1a1a1a;
+  --retro-text-muted: #333333;
+
+  --retro-font-body: "Comic Sans MS", "Times New Roman", serif;
+  --retro-font-heading: "Comic Sans MS", sans-serif;
+}
