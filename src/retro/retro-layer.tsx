@@ -54,16 +54,23 @@ export default function RetroLayer() {
   const [frozen, setFrozen] = useState<FrozenLayout | null>(null);
   const [scale, setScale] = useState(1);
 
+  // Reset synchronously during render (before the clearedIds selector below reads the
+  // store), not in an effect: the measurement effect further down runs on mount and only
+  // ever captures nav-section/gif elements once. If reset ran in an effect instead, the
+  // first commit — and thus that one-time capture — would still see whatever stale
+  // clearedIds the store carried over from a previous playthrough (e.g. after completing
+  // the game, navigating away, then hitting the browser back button), leaving items
+  // pinned at their fallback top-of-column position until an unrelated trigger corrects it.
+  const didResetRef = useRef(false);
+  if (!didResetRef.current) {
+    didResetRef.current = true;
+    useJunkStore.getState().reset();
+    useJunkStore.getState().setTotal(JUNK_ITEMS.length);
+  }
+
   const clearedIds = useJunkStore((s) => s.clearedIds);
   const clearItem = useJunkStore((s) => s.clearItem);
-  const setTotal = useJunkStore((s) => s.setTotal);
   const isComplete = useJunkStore((s) => s.isComplete);
-  const reset = useJunkStore((s) => s.reset);
-
-  useEffect(() => {
-    reset();
-    setTotal(JUNK_ITEMS.length);
-  }, []);
 
   useEffect(() => {
     if (isComplete()) {
