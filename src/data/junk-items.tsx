@@ -34,12 +34,12 @@ export const JUNK_ITEMS: JunkItem[] = [
   { id: 'nav-section', Component: NavSection },
   { id: 'flame-bar', Component: FlameBar },
 
-  // left side panel: vertically centered next to the nav section
+  // left side panel: badge, then Thank You gif, stacked and centered around the nav section
   gifItem('official-site-badge', officialSiteBadge, 208, 'left'),
+  gifItem('thanks-for-visiting', thanksForVisiting, 208, 'left'),
 
-  // right side panel: top, then bottom, centered around the nav section
+  // right side panel: centered on the nav section
   gifItem('webmaster-crossing', webmasterCrossing, 182, 'right'),
-  gifItem('thanks-for-visiting', thanksForVisiting, 208, 'right'),
 ];
 
 export interface ExperiencePage {

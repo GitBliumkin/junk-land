@@ -50,6 +50,7 @@ export default function DraggableJunk({
 
   return (
     <motion.div
+      data-junk-id={id}
       className={className}
       drag
       dragMomentum={false}

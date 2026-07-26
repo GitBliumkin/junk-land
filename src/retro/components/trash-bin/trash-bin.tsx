@@ -8,7 +8,7 @@ interface TrashBinProps {
 }
 
 const TrashBin = forwardRef<HTMLDivElement, TrashBinProps>(({ style }, ref) => (
-  <div ref={ref} className={styles.trashBin} style={style}>
+  <div ref={ref} data-junk-id="trash-bin" className={styles.trashBin} style={style}>
     <div className={styles.dragHint}>
       <span className={styles.dragHintText}>Drag here</span>
       <img src={bentArrow} className={styles.dragHintArrow} alt="" draggable={false} />
