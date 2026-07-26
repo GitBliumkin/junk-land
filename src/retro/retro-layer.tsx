@@ -12,6 +12,18 @@ const STACK_GAP = 48;
 const LEFT_ITEM_RIGHT = 28;
 const RIGHT_ITEM_LEFT = 28;
 const FREEZE_SETTLE_MS = 200;
+const ENTER_STAGGER_S = 0.3;
+// Side columns finish appearing before the central column starts, so JUNK_ITEMS' declaration
+// order (center items first) can't be used directly as the stagger order.
+const ENTER_ORDER = [
+  ...JUNK_ITEMS.filter((item) => item.placement),
+  ...JUNK_ITEMS.filter((item) => !item.placement),
+].map((item) => item.id);
+
+function enterDelay(id: string): number {
+  const index = ENTER_ORDER.indexOf(id);
+  return index === -1 ? 0 : index * ENTER_STAGGER_S;
+}
 
 interface ColumnFrame {
   width: number;
@@ -237,6 +249,7 @@ export default function RetroLayer() {
       trashBinRef={binRef}
       onCleared={clearItem}
       style={itemStyle(item.id, frame)}
+      enterDelay={enterDelay(item.id)}
     >
       <item.Component />
     </DraggableJunk>
@@ -248,7 +261,14 @@ export default function RetroLayer() {
       ? { position: 'absolute', top: frame.top, left: frame.left }
       : { position: 'absolute', right: LEFT_ITEM_RIGHT, top: leftItemTops[item.id] ?? 0 };
     return (
-      <DraggableJunk key={item.id} id={item.id} trashBinRef={binRef} onCleared={clearItem} style={style}>
+      <DraggableJunk
+        key={item.id}
+        id={item.id}
+        trashBinRef={binRef}
+        onCleared={clearItem}
+        style={style}
+        enterDelay={enterDelay(item.id)}
+      >
         <item.Component />
       </DraggableJunk>
     );
@@ -260,7 +280,14 @@ export default function RetroLayer() {
       ? { position: 'absolute', top: frame.top, left: frame.left }
       : { position: 'absolute', left: RIGHT_ITEM_LEFT, top: rightItemTops[item.id] ?? 0 };
     return (
-      <DraggableJunk key={item.id} id={item.id} trashBinRef={binRef} onCleared={clearItem} style={style}>
+      <DraggableJunk
+        key={item.id}
+        id={item.id}
+        trashBinRef={binRef}
+        onCleared={clearItem}
+        style={style}
+        enterDelay={enterDelay(item.id)}
+      >
         <item.Component />
       </DraggableJunk>
     );

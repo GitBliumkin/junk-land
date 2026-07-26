@@ -1,5 +1,5 @@
 import { motion, useAnimation } from 'framer-motion';
-import { type CSSProperties, type ReactNode, type RefObject } from 'react';
+import { useEffect, type CSSProperties, type ReactNode, type RefObject } from 'react';
 
 interface DraggableJunkProps {
   id: string;
@@ -8,6 +8,8 @@ interface DraggableJunkProps {
   children: ReactNode;
   className?: string;
   style?: CSSProperties;
+  /** Seconds to wait before fading in on mount, so items appear one by one on page load. */
+  enterDelay?: number;
 }
 
 function isOverBin(point: { x: number; y: number }, bin: HTMLDivElement) {
@@ -39,8 +41,15 @@ export default function DraggableJunk({
   children,
   className,
   style,
+  enterDelay,
 }: DraggableJunkProps) {
   const controls = useAnimation();
+
+  // Fades in on mount only — opacity doesn't affect getBoundingClientRect(), so it can't
+  // throw off the retro layer's one-time layout freeze no matter how the stagger overlaps it.
+  useEffect(() => {
+    controls.start({ opacity: 1, transition: { delay: enterDelay ?? 0, duration: 0, ease: 'easeOut' } });
+  }, []);
 
   async function handleDragEnd(event: MouseEvent | TouchEvent | PointerEvent) {
     const bin = trashBinRef.current;
@@ -66,6 +75,7 @@ export default function DraggableJunk({
       dragElastic={0.15}
       whileDrag={{ scale: 1.08, zIndex: 999, cursor: 'grabbing' }}
       onDragEnd={handleDragEnd}
+      initial={{ opacity: 0 }}
       animate={controls}
       style={{ touchAction: 'none', ...style }}
     >
