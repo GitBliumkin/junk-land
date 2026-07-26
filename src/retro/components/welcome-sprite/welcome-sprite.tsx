@@ -1,8 +1,14 @@
 import styles from './welcome-sprite.module.css';
+import newHeader from '../../../assets/retro/images/new-header.png';
 
-// Swap for real GIF: src/assets/retro/gifs/welcome-sprite.gif
-const WELCOME_SPRITE_PLACEHOLDER = '📎 Welcome to my page! 🏢 ';
+const WELCOME_TEXT = 'Welcome to my page!';
 
 export default function WelcomeSprite() {
-  return <div className={styles.welcomeSprite}>{WELCOME_SPRITE_PLACEHOLDER}</div>;
+  return (
+    <div className={styles.welcomeSprite}>
+      <img src={newHeader} className={styles.welcomeBadge} alt="" draggable={false} />
+      <span>{WELCOME_TEXT}</span>
+      <img src={newHeader} className={styles.welcomeBadge} alt="" draggable={false} />
+    </div>
+  );
 }

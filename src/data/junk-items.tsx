@@ -152,13 +152,13 @@ export const SECTION_ITEMS: SectionItem[] = [
     title: 'Technologies',
     lines: [
       'Languages: Java, TypeScript, JavaScript, Scala',
-      'Backend: Spring Boot, NestJS, Microservices, REST APIs',
+      'Backend: Spring Boot, NestJS, Microservices, REST/SOAP APIs',
       'Frontend: Angular, React, HTML5, CSS3',
-      'Databases: PostgreSQL, MySQL, DynamoDB, MongoDB',
-      'Messaging: Kafka, IBM MQ, Redis',
+      'Databases: PostgreSQL, MySQL, DynamoDB, MongoDB, Redis',
+      'Messaging: Kafka, IBM MQ, Redis Pub/Sub',
       'Cloud & DevOps: AWS, Docker, CI/CD, Jenkins',
       'Tools: OpenSearch, Elasticsearch, Git, Jira',
-      'AI Tooling: GitHub Copilot, Claude',
+      'AI Tooling: Claude, Copilot',
     ],
     images: [
       { src: javaLogo, alt: 'Java' },

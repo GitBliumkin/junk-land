@@ -1,16 +1,26 @@
+/* Renders above dragged items (which get z-index: 999 while dragging, see draggable-junk)
+   so the bin stays visible when something is dropped/hovered on top of it. */
 .trashBin {
+  position: relative;
   width: 182px;
   height: 182px;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 2000;
+}
+
+/* No z-index of its own — renders at the default level, below anything dragged over it. */
+.dragHintLayer {
+  width: 182px;
+  height: 182px;
+  pointer-events: none;
 }
 
 .dragHint {
   position: absolute;
   bottom: 80%;
   right: 45%;
-  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -32,8 +42,6 @@
 }
 
 .trashBinIcon {
-  position: relative;
-  z-index: 1000;
   height: 168px;
   width: auto;
   pointer-events: none;
