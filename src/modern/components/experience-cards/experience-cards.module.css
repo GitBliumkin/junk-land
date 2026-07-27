@@ -1,0 +1,319 @@
+.container {
+  position: relative;
+  height: 360vh;
+  background: var(--modern-color-ink);
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  background: var(--modern-color-ink);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: clamp(4rem, 14vw, 14rem);
+  padding-right: clamp(4rem, 14vw, 14rem);
+  will-change: transform;
+}
+
+/* Padding lives here on the outer wrapper only — the three lines/text spans
+   underneath have none of their own, so the left and right edges (My/
+   Companies/Results vs. Experience/Clients/Projects) are always equidistant
+   from the viewport edge by construction. */
+.poster {
+  flex: 0 0 100vw;
+  height: 100vh;
+  container-type: inline-size;
+  container-name: posterStage;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(0.5rem, 2.2cqi, 2rem);
+  padding-top: clamp(1.5rem, 5cqi, 4rem);
+  padding-bottom: clamp(1.5rem, 5cqi, 4rem);
+  padding-left: clamp(1rem, 4cqi, 3rem);
+  padding-right: clamp(1rem, 4cqi, 3rem);
+}
+
+.line {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-family: var(--modern-font-heading);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 0.85;
+  font-size: clamp(2.75rem, 12cqi, 13rem);
+  color: var(--modern-color-bone);
+  white-space: nowrap;
+}
+
+/* First and last item pinned to the same left/right edge on every line (same
+   container width + padding), so all three lines read as bounded by shared
+   invisible margins. */
+.justified {
+  justify-content: space-between;
+}
+
+.accent {
+  color: var(--modern-color-signal-red);
+}
+
+.accentBlue {
+  color: var(--modern-color-cobalt);
+}
+
+.imageInset {
+  flex: 0 0 auto;
+  /* Height comes from the line's own font-size (em), so the inset always
+     matches the letters' cap height instead of scaling independently. */
+  height: 0.78em;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border: 1px solid var(--modern-color-slate);
+}
+
+/* Fixed (not content-driven) width and height — every card renders at the
+   same size regardless of bullet count, sized generously enough for the
+   longest entry (Personify, 6 bullets); cardBody centers its own content
+   vertically and, if content still overflowed on some smaller viewport, the
+   overflow-y: auto fallback on cardBody keeps it scrollable instead of
+   breaking the fixed box. */
+.card {
+  position: relative;
+  flex: 0 0 auto;
+  width: min(88vw, 58rem);
+  height: clamp(34rem, 82vh, 44rem);
+  border-radius: 1.75rem;
+  overflow: hidden;
+  border: 1px solid var(--modern-color-slate);
+  background: var(--modern-color-charcoal);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* The photo now fills the entire card as its background, not just a strip
+   at the top — cardBody sits on top of it in normal flow. */
+.cardImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Cards 1 and 3 are visibly sharper than card 2's motion-blur shot — this
+   blurs them to match so all three read as one consistent, hazy set. */
+.cardImageBlurred {
+  filter: blur(6px) saturate(1.05);
+  /* Scaled past the blur radius so the softened edge pixels fall outside
+     the visible crop instead of haloing against the card's rounded border. */
+  transform: scale(1.1);
+}
+
+/* Covers the full card (not just the bottom) so header/tech-stack text stays
+   legible too, not only the bullets — darkest at the bottom where the
+   bullet list and product link live. */
+.cardShade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(20, 21, 25, 0.5) 0%, rgba(20, 21, 25, 0.65) 35%, rgba(20, 21, 25, 0.9) 100%);
+}
+
+/* justify-content: space-between pins the header to the top and the product
+   link to the bottom, spreading the sections between them (tech stack,
+   overview, bullets) across the rest of the fixed-height card — so shorter
+   entries fill the card edge-to-edge instead of clumping as one centered
+   block with big dead margins above and below. The shared `gap` sets the
+   spacing floor between sections; space-between only adds to it when a
+   card's content is shorter than the available height. */
+.cardBody {
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: clamp(1.5rem, 3.5vw, 2.25rem) clamp(1.75rem, 3.5vw, 2.25rem);
+  font-family: var(--modern-font-body);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cardIdentity {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+/* Height-fixed, width-auto rather than a fixed square: the source logos
+   have very different aspect ratios (icon+wordmark lockups, not square
+   marks), so a square box with object-fit: contain would crush them down to
+   an illegible sliver. The source files are also pre-trimmed to their tight
+   content bounding box (see src/assets/modern/images/*-trimmed.png), so a
+   shared height here maps to a genuinely consistent lettering scale instead
+   of being thrown off by inconsistent baked-in padding. */
+.cardLogo {
+  flex: 0 0 auto;
+  height: 3.25rem;
+  width: auto;
+  max-width: 9rem;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.cardTitleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.cardRole {
+  margin: 0;
+  font-family: var(--modern-font-heading);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 0.95;
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  color: var(--modern-color-bone);
+}
+
+.cardCompany {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--modern-color-ash);
+}
+
+.cardChip {
+  align-self: flex-start;
+  margin-top: 0.15rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  background: var(--modern-color-slate);
+  color: var(--modern-color-ash);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cardMeta {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.cardLocation {
+  font-size: 0.85rem;
+  color: var(--modern-color-ash);
+}
+
+.cardDate {
+  font-size: 0.8rem;
+  color: var(--modern-color-ash);
+}
+
+.cardTechStack {
+  margin: 0;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--modern-color-slate);
+  font-size: 0.9rem;
+  color: var(--modern-color-ash);
+}
+
+.cardOverview {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--modern-color-ash);
+}
+
+.cardBulletList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.cardBulletList li {
+  position: relative;
+  padding-left: 1.25rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--modern-color-ash);
+}
+
+/* Matches the role/title color (--modern-color-bone), not the teal used
+   elsewhere in this section. */
+.cardBulletList li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--modern-color-bone);
+}
+
+/* Inline data/tech emphasis within bullets — stays signal-red, kept
+   deliberately distinct from the ember used for the product-page link below
+   so the two accents never get confused for the same kind of highlight. */
+.cardBulletList strong {
+  font-family: var(--modern-font-heading);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--modern-color-signal-red);
+}
+
+.cardPageLink {
+  align-self: center;
+  display: inline-block;
+  margin: 0;
+  padding-bottom: 3px;
+  font-family: var(--modern-font-heading);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+  color: var(--modern-color-ember);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.cardPageLink:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 640px) {
+  .line {
+    font-size: clamp(2rem, 16cqi, 6rem);
+  }
+
+  .card {
+    width: min(86vw, 24rem);
+    height: clamp(28rem, 78vh, 36rem);
+  }
+}

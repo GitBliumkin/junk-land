@@ -14,6 +14,8 @@
   --modern-color-teal: #3d9490; /* secondary accent, tags, borders */
   --modern-color-violet: #8d83c4; /* sparing tertiary — one section max */
   --modern-color-signal-red: #d8434e; /* rare — CTA or one highlight only */
+  --modern-color-cobalt: #4164c8; /* sampled from the shirt in the experience section's first photo */
+  --modern-color-ember: #ff6b35; /* warm CTA accent — distinct from signal-red, used for product-page links */
 
   --modern-font-heading: 'Bebas Neue', sans-serif;
   --modern-font-body: 'Barlow Condensed', system-ui, -apple-system, 'Segoe UI', sans-serif;
