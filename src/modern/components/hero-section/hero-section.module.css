@@ -1,0 +1,121 @@
+.hero {
+  position: relative;
+  height: 200vh;
+}
+
+.stage {
+  container-type: size;
+  container-name: heroStage;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  min-height: 480px;
+  overflow: hidden;
+  background: var(--modern-color-ink);
+}
+
+.backgroundImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  pointer-events: none;
+}
+
+.glassBlock {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  /* Height comes from JS (see hero-section.tsx) measuring .contentStack's
+     actual rendered size — not a guessed viewport percentage. That's what
+     makes the top/bottom padding symmetric and guarantees a fit on any
+     screen, since the box is always exactly as tall as its content. */
+  padding: clamp(1.25rem, 3cqi, 3rem);
+  background: rgba(20, 21, 25, 0.55);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border-top: 1px solid rgba(242, 239, 232, 0.14);
+}
+
+.contentStack {
+  display: flex;
+  flex-direction: column;
+}
+
+.masthead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: clamp(1rem, 4cqi, 3rem);
+  flex-shrink: 0;
+}
+
+.role {
+  font-family: var(--modern-font-body);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: var(--modern-text-label);
+  color: var(--modern-color-ash);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.name {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-family: var(--modern-font-heading);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  font-size: var(--modern-text-display);
+  line-height: 0.88;
+  color: var(--modern-color-bone);
+}
+
+.textContent {
+  max-width: 42rem;
+  margin-top: clamp(1.5rem, 4vw, 3rem);
+}
+
+.heading {
+  margin: 0 0 0.75rem;
+  font-family: var(--modern-font-heading);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  font-size: var(--modern-text-heading);
+  color: var(--modern-color-bone);
+  text-transform: uppercase;
+}
+
+.paragraph {
+  margin: 0 0 0.75rem;
+  font-family: var(--modern-font-body);
+  font-size: var(--modern-text-body);
+  line-height: 1.55;
+  color: var(--modern-color-ash);
+}
+
+.paragraph:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .hero {
+    height: 180vh;
+  }
+
+  .masthead {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .role {
+    text-align: left;
+  }
+}
