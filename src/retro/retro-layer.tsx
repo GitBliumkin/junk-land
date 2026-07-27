@@ -5,6 +5,7 @@ import { useJunkStore } from '../store/junk-store';
 import { JUNK_ITEMS } from '../data/junk-items';
 import TrashBin from './components/trash-bin/trash-bin';
 import DraggableJunk from './components/draggable-junk/draggable-junk';
+import CompletionExplosion from './components/completion-explosion/completion-explosion';
 import './theme.css';
 import styles from './retro-layer.module.css';
 
@@ -13,6 +14,10 @@ const LEFT_ITEM_RIGHT = 28;
 const RIGHT_ITEM_LEFT = 28;
 const FREEZE_SETTLE_MS = 200;
 const ENTER_STAGGER_S = 0.3;
+// Gives the last item's fling-to-bin animation time to finish before the screen goes black.
+const EXPLOSION_DELAY_MS = 400;
+// How long the black screen + explosion gif stays up before navigating away.
+const EXPLOSION_DURATION_MS = 1800;
 // Side columns finish appearing before the central column starts, so JUNK_ITEMS' declaration
 // order (center items first) can't be used directly as the stagger order.
 const ENTER_ORDER = [
@@ -65,6 +70,7 @@ export default function RetroLayer() {
   const [binTop, setBinTop] = useState(0);
   const [frozen, setFrozen] = useState<FrozenLayout | null>(null);
   const [scale, setScale] = useState(1);
+  const [exploding, setExploding] = useState(false);
 
   // Reset synchronously during render (before the clearedIds selector below reads the
   // store), not in an effect: the measurement effect further down runs on mount and only
@@ -86,8 +92,12 @@ export default function RetroLayer() {
 
   useEffect(() => {
     if (isComplete()) {
-      const timeout = setTimeout(() => navigate('/'), 400);
-      return () => clearTimeout(timeout);
+      const showTimeout = setTimeout(() => setExploding(true), EXPLOSION_DELAY_MS);
+      const navTimeout = setTimeout(() => navigate('/'), EXPLOSION_DELAY_MS + EXPLOSION_DURATION_MS);
+      return () => {
+        clearTimeout(showTimeout);
+        clearTimeout(navTimeout);
+      };
     }
   }, [clearedIds]);
 
@@ -348,6 +358,7 @@ export default function RetroLayer() {
         </div>
       </MotionConfig>
     </div>
+    {exploding && <CompletionExplosion />}
   </div>
 );
 }

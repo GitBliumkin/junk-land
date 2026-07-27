@@ -154,7 +154,9 @@
   border: 3px outset var(--retro-color-white);
   text-align: center;
   text-decoration: none;
-  cursor: pointer;
+  /* Native <a> UA style sets its own cursor, breaking inheritance from .retroLayer's
+     custom Windows-98 arrow — force the retro pointing-hand instead. */
+  cursor: url('../../../assets/retro/cursors/hand-point.svg') 8 0, pointer;
 }
 
 .photoLinkButton:active {
@@ -227,7 +229,7 @@
   border: 3px outset var(--retro-color-white);
   text-decoration: none;
   white-space: nowrap;
-  cursor: pointer;
+  cursor: url('../../../assets/retro/cursors/hand-point.svg') 8 0, pointer;
 }
 
 .pageLinkButton:active {
@@ -301,7 +303,7 @@
   justify-content: center;
   background: var(--retro-color-silver);
   border: 3px outset var(--retro-color-white);
-  cursor: pointer;
+  cursor: url('../../../assets/retro/cursors/hand-point.svg') 8 0, pointer;
 }
 
 .pageArrow:active:not(:disabled) {
@@ -310,7 +312,6 @@
 
 .pageArrow:disabled {
   opacity: 0.4;
-  cursor: default;
 }
 
 .pageArrowGlyphLeft,

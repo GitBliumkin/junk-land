@@ -23,7 +23,9 @@
   color: var(--retro-color-navy);
   background: var(--retro-color-silver);
   border: 3px outset var(--retro-color-white);
-  cursor: pointer;
+  /* Native <button>/<a> UA styles set their own cursor, breaking inheritance from
+     .retroLayer's custom Windows-98 arrow — force the retro pointing-hand instead. */
+  cursor: url('../../../assets/retro/cursors/hand-point.svg') 8 0, pointer;
   white-space: nowrap;
   text-align: center;
   text-decoration: none;

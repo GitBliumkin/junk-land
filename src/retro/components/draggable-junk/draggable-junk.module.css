@@ -1,0 +1,7 @@
+.junk {
+  cursor: url('../../../assets/retro/cursors/hand-open.svg') 21 21, grab;
+}
+
+.junk:active {
+  cursor: url('../../../assets/retro/cursors/hand-closed.svg') 21 21, grabbing;
+}

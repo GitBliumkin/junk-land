@@ -1,5 +1,6 @@
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect, type CSSProperties, type ReactNode, type RefObject } from 'react';
+import styles from './draggable-junk.module.css';
 
 interface DraggableJunkProps {
   id: string;
@@ -69,11 +70,11 @@ export default function DraggableJunk({
   return (
     <motion.div
       data-junk-id={id}
-      className={className}
+      className={[styles.junk, className].filter(Boolean).join(' ')}
       drag
       dragMomentum={false}
       dragElastic={0.15}
-      whileDrag={{ scale: 1.08, zIndex: 999, cursor: 'grabbing' }}
+      whileDrag={{ scale: 1.08, zIndex: 999 }}
       onDragEnd={handleDragEnd}
       initial={{ opacity: 0 }}
       animate={controls}

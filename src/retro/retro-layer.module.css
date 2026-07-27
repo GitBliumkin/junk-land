@@ -5,6 +5,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Windows 98 didn't swap to a hand pointer over clickable things, so the whole layer
+     (buttons, links, drag handles included) keeps this one arrow rather than the browser's. */
+  cursor: url('../assets/retro/cursors/arrow.svg') 3 3, auto;
   background-color: var(--retro-color-teal); /* #008080 */
   background-image:
     repeating-linear-gradient(

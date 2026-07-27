@@ -6,7 +6,6 @@
   background: var(--retro-color-navy);
   border: 4px outset var(--retro-color-silver);
   padding: 12px 20px;
-  cursor: grab;
   user-select: none;
   text-align: center;
   display: flex;
