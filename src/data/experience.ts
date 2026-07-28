@@ -65,7 +65,7 @@ export const EXPERIENCE: ExperienceEntry[] = [
     overview:
       'A real-time payments gateway banks use to move money between each other instantly instead of waiting days for transfers to settle.',
     bullets: [
-      "Developed backend transaction processing pipeline for Fiserv's NOW Gateway, reducing payment settlement time from <strong>1–3 days to seconds</strong> via ISO format normalization, validation, and routing through The Clearing House RTP network",
+      "Developed backend transaction processing pipeline for Fiserv's NOW Gateway, reducing payment settlement time from <strong>1–3 days to seconds</strong><br />via ISO format normalization, validation, and routing through The Clearing House RTP network",
       'Built services processing <strong>100,000+ transactions monthly</strong> across 5,000+ financial institutions using Java (Spring Boot), integrated Kafka and IBM MQ for asynchronous communication',
       'Designed real-time monitoring dashboard tracking transaction throughput, success rates, and system failures across financial institutions',
       'Implemented SQL-driven test automation harness enabling support teams to simulate and validate real transaction scenarios',

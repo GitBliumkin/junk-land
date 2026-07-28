@@ -14,11 +14,20 @@
   background: var(--modern-color-ink);
 }
 
+/* Max raised from 14rem: 14vw is deliberately the same coefficient as the
+   margin around a centered card ((100% - 72% card width) / 2 = 14%), so
+   below the old cap's threshold (1600px) the gap and the margin matched
+   exactly and adjacent cards sat perfectly flush at the viewport edge
+   during a hold. Past 1600px the old cap stopped growing while the
+   margin kept scaling with the viewport, so the gap fell short of the
+   margin and a sliver of the next/previous card peeked into view — the
+   same bug as the card-width/heading-font fixes, just on this property
+   too. 60rem keeps the two matched through ~6800px. */
 .row {
   display: flex;
   align-items: center;
-  gap: clamp(4rem, 14vw, 14rem);
-  padding-right: clamp(4rem, 14vw, 14rem);
+  gap: clamp(4rem, 14vw, 60rem);
+  padding-right: clamp(4rem, 14vw, 60rem);
   will-change: transform;
 }
 
@@ -50,7 +59,13 @@
   text-transform: uppercase;
   letter-spacing: 0.01em;
   line-height: 0.85;
-  font-size: clamp(2.75rem, 12cqi, 13rem);
+  /* Max raised from 13rem: at very wide viewports (2500px+, e.g. a large
+     external monitor) the old cap kicked in well before the vw-scaled
+     value did, so this text — meant to read as one large hero-scale
+     poster — rendered proportionally smaller there than it did on a
+     typical 1280-1920px window. 21rem keeps the 12cqi value uncapped
+     through ~2800px. */
+  font-size: clamp(2.75rem, 12cqi, 21rem);
   color: var(--modern-color-bone);
   white-space: nowrap;
 }
@@ -89,8 +104,16 @@
 .card {
   position: relative;
   flex: 0 0 auto;
-  width: min(88vw, 58rem);
-  height: clamp(34rem, 82vh, 44rem);
+  /* 72vw (was 88vw) — 88 left barely any visible margin around the card,
+     reading as edge-to-edge; 72 leaves clear whitespace on both sides so
+     the card reads as a focused card rather than a full-bleed panel. The
+     rem cap is a pure sanity ceiling for very wide monitors, not a
+     width-fighting constraint — see the width-consistency fix history:
+     any cap the viewport can outgrow reintroduces the "two cards visible
+     at once" bug, so this is set far past any realistic single-monitor
+     width (including 5120px ultrawide/5K). */
+  width: min(72vw, 300rem);
+  height: clamp(38rem, 82vh, 56rem);
   border-radius: 1.75rem;
   overflow: hidden;
   border: 1px solid var(--modern-color-slate);
@@ -189,13 +212,13 @@
   text-transform: uppercase;
   letter-spacing: 0.01em;
   line-height: 0.95;
-  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  font-size: clamp(1.5rem, 2.8vw, 3rem);
   color: var(--modern-color-bone);
 }
 
 .cardCompany {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: clamp(1.05rem, 1.1vw, 1.4rem);
   color: var(--modern-color-ash);
 }
 
@@ -206,7 +229,7 @@
   border-radius: 6px;
   background: var(--modern-color-slate);
   color: var(--modern-color-ash);
-  font-size: 0.7rem;
+  font-size: clamp(0.8rem, 0.85vw, 1.05rem);
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -223,12 +246,12 @@
 }
 
 .cardLocation {
-  font-size: 0.85rem;
+  font-size: clamp(1rem, 1.05vw, 1.3rem);
   color: var(--modern-color-ash);
 }
 
 .cardDate {
-  font-size: 0.8rem;
+  font-size: clamp(0.95rem, 1vw, 1.25rem);
   color: var(--modern-color-ash);
 }
 
@@ -236,15 +259,15 @@
   margin: 0;
   padding-bottom: 1.25rem;
   border-bottom: 1px solid var(--modern-color-slate);
-  font-size: 0.9rem;
+  font-size: clamp(1.05rem, 1.1vw, 1.4rem);
   color: var(--modern-color-ash);
 }
 
 .cardOverview {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: clamp(1.1rem, 1.15vw, 1.5rem);
   line-height: 1.5;
-  color: var(--modern-color-ash);
+  color: var(--modern-color-bone);
 }
 
 .cardBulletList {
@@ -259,20 +282,23 @@
 .cardBulletList li {
   position: relative;
   padding-left: 1.25rem;
-  font-size: 0.9rem;
+  font-size: clamp(1.05rem, 1.15vw, 1.45rem);
   line-height: 1.5;
   color: var(--modern-color-ash);
 }
 
 /* Matches the role/title color (--modern-color-bone), not the teal used
-   elsewhere in this section. */
+   elsewhere in this section. Narrow vertical rectangle (not a square) so the
+   marker reads as a tick mark; height ties to the bullet's own (now
+   vw-scaled) font-size so it grows in step with the text instead of staying
+   pinned to a fixed pixel size on large screens. */
 .cardBulletList li::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 0.45em;
-  width: 8px;
-  height: 8px;
+  top: 0.2em;
+  width: 4px;
+  height: 1.1em;
   border-radius: 2px;
   background: var(--modern-color-bone);
 }
@@ -297,7 +323,7 @@
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+  font-size: clamp(1.3rem, 2.2vw, 2rem);
   color: var(--modern-color-ember);
   text-decoration: none;
   border-bottom: 1px solid currentColor;

@@ -26,12 +26,27 @@ const CARDS = [
 const POSTER_ASSEMBLE_END = 0.15;
 const POSTER_HOLD_END = 0.35;
 
+// The [POSTER_HOLD_END, 1] range is divided into one equal slice per card;
+// within each slice, the row slides from the previous card's centered
+// position to this card's (the "transit"), then sits still there (the
+// "hold") until the slice ends — so every card gets a dwell at center
+// before the next one starts sliding in, rather than one continuous slide
+// straight through all three. The last card's hold simply runs to the end
+// of the range, so scrolling further releases the sticky stage into
+// whatever comes after this section.
+const HOLD_SHARE = 0.55;
+
 export default function ExperienceCards() {
   const containerRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const rowRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const [maxTranslate, setMaxTranslate] = useState(0);
+  // translateX needed to center each card in the stage, measured from the
+  // cards' own natural (untransformed) layout position — offsetLeft is
+  // unaffected by the x transform below, since CSS transforms don't move
+  // an element in normal flow, only how it paints.
+  const [cardCenters, setCardCenters] = useState<number[]>([]);
 
   useLayoutEffect(() => {
     const stageEl = stageRef.current;
@@ -39,7 +54,17 @@ export default function ExperienceCards() {
     if (!stageEl || !rowEl) return;
 
     const measure = () => {
-      setMaxTranslate(Math.max(0, rowEl.scrollWidth - stageEl.clientWidth));
+      const stageWidth = stageEl.clientWidth;
+      const maxTranslate = Math.max(0, rowEl.scrollWidth - stageWidth);
+      const centers = cardRefs.current.map((cardEl) => {
+        if (!cardEl) return 0;
+        const center = stageWidth / 2 - (cardEl.offsetLeft + cardEl.offsetWidth / 2);
+        // Never ask to translate further than the row actually extends —
+        // centering the last card can otherwise overshoot into the empty
+        // space reserved by .row's own padding-right past it.
+        return Math.max(center, -maxTranslate);
+      });
+      setCardCenters(centers);
     };
 
     measure();
@@ -59,7 +84,28 @@ export default function ExperienceCards() {
   // single unit along with the rest of the row as the cards take its place.
   const fromRightX = useTransform(scrollYProgress, [0, POSTER_ASSEMBLE_END], ['100%', '0%']);
   const fromLeftX = useTransform(scrollYProgress, [0, POSTER_ASSEMBLE_END], ['-100%', '0%']);
-  const x = useTransform(scrollYProgress, [POSTER_HOLD_END, 1], [0, -maxTranslate]);
+
+  // Function form (not the array-range form) deliberately — see the note
+  // on TechStack's TechRow component: useTransform(value, [a, b], [c, d])
+  // hands narrow sub-ranges of a scroll-linked value off to a native
+  // "accelerated" path that doesn't hold its end value correctly, which
+  // this piecewise hold/transit logic depends on.
+  const x = useTransform(scrollYProgress, (p) => {
+    if (p <= POSTER_HOLD_END || cardCenters.length === 0) return 0;
+
+    const cardCount = cardCenters.length;
+    const sliceSize = (1 - POSTER_HOLD_END) / cardCount;
+    const localP = p - POSTER_HOLD_END;
+    const sliceIndex = Math.min(cardCount - 1, Math.floor(localP / sliceSize));
+    const withinSlice = localP - sliceIndex * sliceSize;
+    const transitDuration = sliceSize * (1 - HOLD_SHARE);
+
+    const prevCenter = sliceIndex === 0 ? 0 : cardCenters[sliceIndex - 1];
+    const thisCenter = cardCenters[sliceIndex];
+
+    if (transitDuration <= 0 || withinSlice >= transitDuration) return thisCenter;
+    return prevCenter + (thisCenter - prevCenter) * (withinSlice / transitDuration);
+  });
 
   return (
     <section ref={containerRef} className={styles.container}>
@@ -82,8 +128,14 @@ export default function ExperienceCards() {
               <span>Projects</span>
             </motion.div>
           </div>
-          {CARDS.map(({ image, blurred, entry }) => (
-            <div className={styles.card} key={image}>
+          {CARDS.map(({ image, blurred, entry }, index) => (
+            <div
+              ref={(el) => {
+                cardRefs.current[index] = el;
+              }}
+              className={styles.card}
+              key={image}
+            >
               <LazyImage
                 src={image}
                 alt=""
