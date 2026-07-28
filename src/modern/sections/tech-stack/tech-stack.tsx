@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import styles from './tech-stack.module.css';
 import techImage from '../../../assets/modern/images/technologies.jpg';
+import { useIsMobile } from '../../../shared/use-is-mobile';
 
 const TECH_STACK = [
   { category: 'Languages', items: 'Java, TypeScript, JavaScript, Scala' },
@@ -24,6 +25,7 @@ export default function TechStack() {
   const contentRef = useRef<HTMLDivElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const [listIndent, setListIndent] = useState(0);
+  const isMobile = useIsMobile();
 
   useLayoutEffect(() => {
     const contentEl = contentRef.current;
@@ -86,7 +88,11 @@ export default function TechStack() {
             alt=""
             className={styles.imageRevealImg}
             draggable={false}
-            style={{ x: slideX, y: slideY, rotate, transformOrigin: 'bottom left' }}
+            style={
+              isMobile
+                ? { x: '0%', y: '0%', rotate: 0 }
+                : { x: slideX, y: slideY, rotate, transformOrigin: 'bottom left' }
+            }
           />
         </div>
       </div>

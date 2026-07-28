@@ -321,8 +321,40 @@
     font-size: clamp(2rem, 16cqi, 6rem);
   }
 
+  .row {
+    flex-direction: column;
+    width: 100%;
+    gap: 3rem;
+    padding-right: 0;
+    padding-bottom: 3rem;
+  }
+
+  .poster {
+    flex: 0 0 100vh;
+    width: 100%;
+  }
+
+  /* Taller (was clamp(28rem, 78vh, 36rem)) so more of each card's content
+     fits without needing .cardBody's internal scroll — combined with
+     dropping the logo and stacking the header below, there's more room to
+     work with too. */
   .card {
-    width: min(86vw, 24rem);
-    height: clamp(28rem, 78vh, 36rem);
+    width: min(88vw, 26rem);
+    height: clamp(32rem, 92vh, 42rem);
+  }
+
+  .cardLogo {
+    display: none;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .cardMeta {
+    align-items: flex-start;
+    text-align: left;
   }
 }

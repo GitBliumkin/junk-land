@@ -22,6 +22,12 @@
   cursor: grabbing;
 }
 
+@media (max-width: 640px) {
+  .track {
+    display: none;
+  }
+}
+
 /* The bone-colored bar the hit box centers — this is what's actually seen
    and what data-visible fades in/out; .track itself never paints anything. */
 .trackVisual {

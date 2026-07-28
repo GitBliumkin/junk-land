@@ -4,6 +4,7 @@ import styles from './experience-cards.module.css';
 import LazyImage from '../lazy-image/lazy-image';
 import { EXPERIENCE } from '../../data/experience';
 import { POSTER_ASSEMBLE_END, POSTER_HOLD_END, HOLD_SHARE } from './experience-scroll';
+import { useIsMobile } from '../../../shared/use-is-mobile';
 import experienceImage1 from '../../../assets/modern/images/expiriance-1.jpg';
 import experienceImage2 from '../../../assets/modern/images/experiance-2.jpg';
 import experienceImage3 from '../../../assets/modern/images/expepiriance-3.jpg';
@@ -20,6 +21,7 @@ export default function ExperienceCards() {
   const rowRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [cardCenters, setCardCenters] = useState<number[]>([]);
+  const isMobile = useIsMobile();
 
   useLayoutEffect(() => {
     const stageEl = stageRef.current;
@@ -27,11 +29,14 @@ export default function ExperienceCards() {
     if (!stageEl || !rowEl) return;
 
     const measure = () => {
-      const stageWidth = stageEl.clientWidth;
-      const maxTranslate = Math.max(0, rowEl.scrollWidth - stageWidth);
+      const stageSize = isMobile ? stageEl.clientHeight : stageEl.clientWidth;
+      const rowContentSize = isMobile ? rowEl.scrollHeight : rowEl.scrollWidth;
+      const maxTranslate = Math.max(0, rowContentSize - stageSize);
       const centers = cardRefs.current.map((cardEl) => {
         if (!cardEl) return 0;
-        const center = stageWidth / 2 - (cardEl.offsetLeft + cardEl.offsetWidth / 2);
+        const cardStart = isMobile ? cardEl.offsetTop : cardEl.offsetLeft;
+        const cardSize = isMobile ? cardEl.offsetHeight : cardEl.offsetWidth;
+        const center = stageSize / 2 - (cardStart + cardSize / 2);
         return Math.max(center, -maxTranslate);
       });
       setCardCenters(centers);
@@ -42,7 +47,7 @@ export default function ExperienceCards() {
     observer.observe(stageEl);
     observer.observe(rowEl);
     return () => observer.disconnect();
-  }, []);
+  }, [isMobile]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -58,7 +63,7 @@ export default function ExperienceCards() {
   const fromRightX = useTransform(scrollYProgress, [0, POSTER_ASSEMBLE_END], ['100%', '0%']);
   const fromLeftX = useTransform(scrollYProgress, [0, POSTER_ASSEMBLE_END], ['-100%', '0%']);
 
-  const x = useTransform(scrollYProgress, (p) => {
+  const cardTranslate = useTransform(scrollYProgress, (p) => {
     if (p <= POSTER_HOLD_END || cardCenters.length === 0) return 0;
 
     const cardCount = cardCenters.length;
@@ -79,7 +84,11 @@ export default function ExperienceCards() {
     <section ref={containerRef} id="experience" className={styles.container}>
       <div ref={stageRef} className={styles.stage}>
         <motion.div className={styles.stageFill} style={{ opacity: cardExitOpacity }} />
-        <motion.div ref={rowRef} className={styles.row} style={{ x }}>
+        <motion.div
+          ref={rowRef}
+          className={styles.row}
+          style={isMobile ? { y: cardTranslate } : { x: cardTranslate }}
+        >
           <div className={styles.poster}>
             <motion.div className={`${styles.line} ${styles.justified}`} style={{ x: fromRightX }}>
               <span className={styles.accent}>My</span>

@@ -119,4 +119,12 @@
   .role {
     text-align: left;
   }
+
+  .heading {
+    font-size: clamp(2rem, 8.5vw, 2.75rem);
+  }
+
+  .paragraph {
+    font-size: clamp(1.15rem, 4.3vw, 1.4rem);
+  }
 }

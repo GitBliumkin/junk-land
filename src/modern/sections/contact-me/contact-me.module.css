@@ -119,6 +119,7 @@
     position: static;
     writing-mode: horizontal-tb;
     font-size: clamp(2.5rem, 14cqi, 4.5rem);
+    color: var(--modern-color-signal-red);
   }
 
   .detailsWrap {

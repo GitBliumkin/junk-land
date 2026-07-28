@@ -96,12 +96,6 @@
 
 @media (max-width: 640px) {
   .nav {
-    top: 1rem;
-    right: 1rem;
-    column-gap: 1.25rem;
-  }
-
-  .group {
-    column-gap: 1.25rem;
+    display: none;
   }
 }
