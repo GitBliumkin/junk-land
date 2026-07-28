@@ -19,20 +19,22 @@
   overflow: hidden;
 }
 
-/* Grown via clip-path in JS (see ContactMe.tsx) from a hidden sliver at the
-   top edge down to these full bounds, so the photo reveals top-to-bottom
-   rather than popping in at once. */
-.imageReveal {
+/* background-attachment: fixed (not a normal <img>) — the same technique,
+   same image, same background-size/position as Education's heading and
+   logo cutouts (see Education.module.css). That's what makes this read as
+   one motionless photo the whole time, sitting behind Education from the
+   start and simply uncovered as its cream layer slides away, rather than a
+   second copy of the photo that scrolls up into place on its own — a plain
+   object-fit <img> here would move with the page like any other in-flow
+   element, breaking that illusion by visibly sliding in from below instead
+   of already being there. */
+.backgroundImage {
   position: absolute;
   inset: 0;
   z-index: 0;
-}
-
-.backgroundImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   pointer-events: none;
 }
 

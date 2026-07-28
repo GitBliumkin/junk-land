@@ -11,10 +11,13 @@ const PHONE_HREF = 'tel:+13439882229';
 
 // This section is pinned (see .stage's position: sticky) for its own scroll
 // range, same mechanic as TechStack — [0, ASSEMBLE_END] of that pinned range
-// is spent assembling (image reveal, header rise, details fade-up), then it
-// holds fully assembled for the rest of the range. There's nothing after it
-// to hand off to; the hold just means the finished layout is what's on
-// screen for the remainder of the scroll to the true bottom of the page.
+// is spent assembling (header rise, details fade-up), then it holds fully
+// assembled for the rest of the range. There's nothing after it to hand off
+// to; the hold just means the finished layout is what's on screen for the
+// remainder of the scroll to the true bottom of the page. The background
+// photo itself isn't part of this assemble sequence — it's fully visible
+// from the start, since Education's own slide-away (see Education.tsx) is
+// what reveals it; animating it in again here would undercut that handoff.
 const ASSEMBLE_END = 0.45;
 
 function LinkedInIcon() {
@@ -43,15 +46,6 @@ export default function ContactMe() {
 
   const assembleProgress = useTransform(scrollYProgress, (p) => Math.min(1, p / ASSEMBLE_END));
 
-  // Grows from a hidden sliver at the top edge down to the image's full
-  // bounds — the box itself already fills the stage (see .imageReveal), so
-  // this only animates how much of it shows, top-to-bottom.
-  const imageClipPath = useTransform(
-    assembleProgress,
-    [0, 1],
-    ['inset(0% 0% 100% 0%)', 'inset(0% 0% 0% 0%)'],
-  );
-
   // Header rises into place over the first slice of the assemble range,
   // starting well below its resting spot so it reads as rising up from the
   // bottom of the screen rather than simply fading in where it sits.
@@ -69,9 +63,11 @@ export default function ContactMe() {
   return (
     <section ref={sectionRef} className={styles.section}>
       <div className={styles.stage}>
-        <motion.div className={styles.imageReveal} style={{ clipPath: imageClipPath }}>
-          <img src={contactImage} alt="" className={styles.backgroundImage} draggable={false} />
-        </motion.div>
+        <div
+          aria-hidden="true"
+          className={styles.backgroundImage}
+          style={{ backgroundImage: `url(${contactImage})` }}
+        />
 
         <div className={styles.content}>
           <motion.h2 className={styles.heading} style={{ opacity: headerOpacity, y: headerY }}>

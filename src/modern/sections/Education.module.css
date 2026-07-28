@@ -55,7 +55,6 @@
   letter-spacing: 0.01em;
   line-height: 0.85;
   font-size: clamp(2.5rem, 24cqi, 26rem);
-  color: var(--modern-color-ink);
   white-space: nowrap;
   /* At this font-size, Bebas Neue's descender metric (reserved for glyphs
      this all-caps text never uses) counts toward the *document's*
@@ -64,6 +63,20 @@
      last section, on wide screens. overflow: hidden clips that phantom
      region from the layout without touching the visible glyphs or box. */
   overflow: hidden;
+  /* Stencil-cut into the photo (image itself set inline in Education.tsx,
+     since CSS modules can't reference the JS-imported asset path) rather
+     than filled with a flat color — background-clip: text turns the glyph
+     shapes into a mask over the image instead of painting them solid.
+     background-attachment: fixed anchors the crop to actual viewport
+     coordinates (not this element's own box), which is what keeps it lined
+     up with the logo's own cutout below and with ContactMe's full version
+     of the same photo once this section slides away to reveal it. */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 /* flex: 1 makes this claim all width left over after the heading, then
@@ -80,13 +93,26 @@
   gap: 0.5rem;
 }
 
-/* Source lockup (crest + wordmark) is already transparent-background — sits
-   directly on this section's bone background with no card behind it. */
+/* Same stencil trick as .heading, but built from a mask instead of text:
+   this is a plain div with the photo as its background, cropped to the
+   crest+wordmark's own silhouette via mask-image (the source PNG's alpha
+   channel — transparent everywhere but the black artwork — becomes the
+   mask). Square source image (320x320), hence the 1/1 aspect-ratio in place
+   of the old <img>'s natural sizing. Sized well past a typical logo — a
+   bigger window onto the photo reads more clearly as "a photo" than a small
+   one does, since there's more of it visible at once to recognize. */
 .logo {
-  height: clamp(2.5rem, 6cqi, 4rem);
-  width: auto;
-  max-width: 16rem;
-  object-fit: contain;
+  height: clamp(6rem, 14cqi, 11rem);
+  aspect-ratio: 1 / 1;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
 }
 
 .school {
