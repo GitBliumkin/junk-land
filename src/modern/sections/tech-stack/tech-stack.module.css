@@ -122,11 +122,15 @@
   color: var(--modern-color-bone);
 }
 
+/* bone (not ash) — WCAG AA audit found ash dropping as low as 2.35:1 where
+   the list overlaps the brighter (glass/sky) regions of the photo below;
+   bone (already used for .rowCategory above) clears 4.5:1 with the photo
+   left at full vividness (no darkening layer needed). */
 .rowItems {
   flex: 1 1 16rem;
   font-family: var(--modern-font-body);
   font-size: clamp(0.95rem, 1.6cqi, 1.15rem);
-  color: var(--modern-color-ash);
+  color: var(--modern-color-bone);
 }
 
 .imageReveal {
@@ -137,13 +141,6 @@
   height: 60%;
   aspect-ratio: 6232 / 4056;
   overflow: hidden;
-}
-
-.imageReveal::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(20, 21, 25, 0.7);
 }
 
 .imageRevealImg {

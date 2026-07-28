@@ -136,10 +136,16 @@
   transform: scale(1.1);
 }
 
+/* Top stop nudged from 0.5 to 0.56 — WCAG AA contrast audit found the
+   header (.cardCompany, ~0%) failing 4.5:1 against MC Pro's brightest photo
+   region (1.72:1). Paired with .cardCompany/.cardBulletList moving to
+   --modern-color-bone below, this small a bump is enough — 35%/100% stops
+   are unchanged since bone already cleared 4.5:1 there at the original
+   0.65/0.9. Kept minimal so the photo stays as visible as possible. */
 .cardShade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(20, 21, 25, 0.87) 0%, rgba(20, 21, 25, 0.89) 35%, rgba(20, 21, 25, 0.94) 100%);
+  background: linear-gradient(180deg, rgba(20, 21, 25, 0.56) 0%, rgba(20, 21, 25, 0.65) 35%, rgba(20, 21, 25, 0.9) 100%);
 }
 
 .cardBody {
@@ -195,10 +201,14 @@
   color: var(--modern-color-bone);
 }
 
+/* bone (not ash) — WCAG AA audit found ash falling as low as 1.72:1 against
+   the photo behind this header on some cards; bone (already used for
+   .cardRole/.cardOverview/.cardMeta right above and below) clears 4.5:1
+   without needing to darken the photo any further. */
 .cardCompany {
   margin: 0;
   font-size: clamp(1.05rem, 1.1vw, 1.4rem);
-  color: var(--modern-color-ash);
+  color: var(--modern-color-bone);
 }
 
 .cardChip {
@@ -258,12 +268,14 @@
   gap: 0.85rem;
 }
 
+/* bone (not ash) — same WCAG AA fix as .cardCompany above; ash dropped as
+   low as 3.10:1 against these cards' brighter photo regions. */
 .cardBulletList li {
   position: relative;
   padding-left: 1.25rem;
   font-size: clamp(1.05rem, 1.15vw, 1.45rem);
   line-height: 1.5;
-  color: var(--modern-color-ash);
+  color: var(--modern-color-bone);
 }
 
 .cardBulletList li::before {
