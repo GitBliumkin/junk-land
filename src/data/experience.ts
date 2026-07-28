@@ -3,7 +3,6 @@ import viewbidLogo from '../assets/modern/images/viewbid-logo.png';
 import fiservLogo from '../assets/modern/images/fiserv-logo.png';
 
 export interface ExperienceEntry {
-  id: string;
   logoSrc: string;
   company: string;
   project?: string;
@@ -18,7 +17,6 @@ export interface ExperienceEntry {
 
 export const EXPERIENCE: ExperienceEntry[] = [
   {
-    id: 'personify',
     logoSrc: mcProLogo,
     productUrl: 'https://memberclicks.com/products/professional/',
     company: 'Personify – MC Professional Platform',
@@ -36,7 +34,6 @@ export const EXPERIENCE: ExperienceEntry[] = [
     ],
   },
   {
-    id: 'levio-viewbid',
     logoSrc: viewbidLogo,
     productUrl: 'https://viewbid.com/home',
     company: 'Levio (formerly Indellient)',
@@ -54,7 +51,6 @@ export const EXPERIENCE: ExperienceEntry[] = [
     ],
   },
   {
-    id: 'levio-fiserv',
     logoSrc: fiservLogo,
     productUrl: 'https://www.fiserv.com/en/solutions/instant-payments/now-gateway.html',
     company: 'Levio (formerly Indellient)',
