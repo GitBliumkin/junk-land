@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import type { SectionItem } from '../../../data/junk-items';
 import styles from './section-panel.module.css';
@@ -18,13 +17,15 @@ function highlight(text: string, styles: Record<string, string>) {
   );
 }
 
-export default function SectionPanel({ section }: { section: SectionItem }) {
-  const [pageIndex, setPageIndex] = useState(0);
+interface SectionPanelProps {
+  section: SectionItem;
+  /** Owned by NavSection (not local state) so it can stay in sync with the
+   *  URL hash — see nav-section.tsx. */
+  pageIndex: number;
+  onPageChange: (index: number) => void;
+}
 
-  useEffect(() => {
-    setPageIndex(0);
-  }, [section.id]);
-
+export default function SectionPanel({ section, pageIndex, onPageChange }: SectionPanelProps) {
   const pages = section.pages;
   const page = pages?.[pageIndex];
 
@@ -79,7 +80,7 @@ export default function SectionPanel({ section }: { section: SectionItem }) {
                 <button
                   type="button"
                   className={styles.pageArrow}
-                  onClick={() => setPageIndex((i) => Math.max(0, i - 1))}
+                  onClick={() => onPageChange(Math.max(0, pageIndex - 1))}
                   disabled={pageIndex === 0}
                   aria-label="Previous page"
                 >
@@ -91,7 +92,7 @@ export default function SectionPanel({ section }: { section: SectionItem }) {
                 <button
                   type="button"
                   className={styles.pageArrow}
-                  onClick={() => setPageIndex((i) => Math.min(pages.length - 1, i + 1))}
+                  onClick={() => onPageChange(Math.min(pages.length - 1, pageIndex + 1))}
                   disabled={pageIndex === pages.length - 1}
                   aria-label="Next page"
                 >

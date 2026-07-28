@@ -1,27 +1,44 @@
 /* Fixed, not absolute/sticky — pinned to the viewport edge regardless of
    scroll position, and since it's taken out of flow entirely it never
    reserves space or shifts any layout (the thing a native scrollbar's
-   gutter would otherwise do). pointer-events: none so it never intercepts
-   clicks meant for the page underneath. */
+   gutter would otherwise do). This is the *hit box* for hover/drag — much
+   wider than the visible bar (.trackVisual below) so it's actually easy to
+   grab, same idea as nav-bar.tsx's own widened scrollbar hover zone. */
 .track {
   position: fixed;
-  top: 0.75rem;
-  right: 0.5rem;
-  bottom: 0.75rem;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 28px;
+  display: flex;
+  justify-content: center;
+  z-index: 100;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.track[data-dragging='true'] {
+  cursor: grabbing;
+}
+
+/* The bone-colored bar the hit box centers — this is what's actually seen
+   and what data-visible fades in/out; .track itself never paints anything. */
+.trackVisual {
+  position: relative;
   width: 4px;
+  margin: 0.75rem 0;
   border-radius: 2px;
   background: var(--modern-color-bone);
   opacity: 0;
   transition: opacity 0.3s ease;
-  pointer-events: none;
-  z-index: 100;
   overflow: hidden;
 }
 
 /* data-visible (not a class) is toggled straight on the DOM node from
-   scroll-progress.tsx's scroll listener, bypassing React state/re-renders
-   on every scroll tick. */
-.track[data-visible='true'] {
+   scroll-progress.tsx's scroll/hover/drag handlers, bypassing React
+   state/re-renders on every scroll tick. */
+.track[data-visible='true'] .trackVisual {
   opacity: 1;
 }
 

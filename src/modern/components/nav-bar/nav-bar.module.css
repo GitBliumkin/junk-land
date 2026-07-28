@@ -17,6 +17,20 @@
      around them) to whatever's underneath — only the items themselves
      (and the dropdown) opt back in below. */
   pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.navHidden {
+  opacity: 0;
+  transform: translateY(-0.75rem);
+  /* Also stops the (otherwise pointer-events: auto) items/dropdown from
+     eating clicks while faded out. */
+  pointer-events: none;
+}
+
+.navHidden .link,
+.navHidden .dropdownWrap {
+  pointer-events: none;
 }
 
 .group {
@@ -48,7 +62,10 @@
   padding-bottom: 2px;
   font-family: var(--modern-font-body);
   font-weight: 600;
-  font-size: 0.85rem;
+  /* Scales smoothly with viewport width instead of jumping at a single
+     breakpoint — clamped so it neither shrinks below mobile-legible nor
+     grows past the size tuned for the widest layouts. */
+  font-size: clamp(0.75rem, 0.65rem + 0.4vw, 0.95rem);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -63,6 +80,23 @@
   color: var(--modern-color-ash);
 }
 
+/* Education is the one section with a light (bone) background instead of
+   the page's dark ink (see Education.module.css) — bone-colored nav text
+   would nearly disappear against it, so it flips to ink while that section
+   fills the screen behind the nav (see nav-bar.tsx's onLightSection). */
+.navOnLight .link {
+  color: var(--modern-color-ink);
+}
+
+.navOnLight .link:hover,
+.navOnLight .link[aria-expanded='true'] {
+  color: var(--modern-color-ash);
+}
+
+.navOnLight .divider {
+  background: var(--modern-color-ink);
+}
+
 .dropdownWrap {
   position: relative;
   pointer-events: auto;
@@ -74,7 +108,7 @@
   right: 0;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   row-gap: 0.6rem;
 }
 
@@ -87,9 +121,5 @@
 
   .group {
     column-gap: 1.25rem;
-  }
-
-  .link {
-    font-size: 0.75rem;
   }
 }

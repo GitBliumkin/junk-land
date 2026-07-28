@@ -52,6 +52,10 @@ export interface ExperiencePage {
   /** Project/product website, shown as a link button beside the header. */
   link?: string;
   bullets: string[];
+  /** Stable URL hash for this page — shares its naming with the modern
+   *  layer's Experience dropdown (see modern/components/nav-bar/nav-bar.tsx)
+   *  so both layers address the same role under the same URL. */
+  hash: string;
 }
 
 export interface SectionItem {
@@ -99,6 +103,7 @@ export const SECTION_ITEMS: SectionItem[] = [
     title: 'Experience',
     pages: [
       {
+        hash: 'experience-mc-pro',
         role: 'Software Developer II',
         company: 'Personify – MC Professional Platform',
         location: 'Toronto, ON',
@@ -116,6 +121,7 @@ export const SECTION_ITEMS: SectionItem[] = [
         ],
       },
       {
+        hash: 'experience-viewbid',
         role: 'Full Stack Developer',
         company: 'Levio (formerly Indellient)',
         location: 'Toronto, ON',
@@ -131,6 +137,7 @@ export const SECTION_ITEMS: SectionItem[] = [
         ],
       },
       {
+        hash: 'experience-fiserv',
         role: 'Full Stack Developer',
         company: 'Levio (formerly Indellient)',
         location: 'Toronto, ON',

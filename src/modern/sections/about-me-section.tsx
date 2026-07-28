@@ -128,7 +128,20 @@ export default function HeroSection() {
     <section ref={sectionRef} id="about-me" className={styles.hero}>
       <div ref={stageRef} className={styles.stage}>
         <img src={aboutMeImage} alt="" className={styles.backgroundImage} draggable={false} />
-        <motion.div ref={glassBlockRef} className={styles.glassBlock} style={{ height: blockHeight }}>
+        <motion.div
+          ref={glassBlockRef}
+          className={styles.glassBlock}
+          style={{ height: blockHeight }}
+          // One-time entrance on page load — separate from the scroll-driven
+          // height above, this just slides the panel up from below .stage's
+          // own overflow:hidden edge (see about-me-section.module.css), so it
+          // reads as rising into place rather than simply being there.
+          // initial/animate only plays once on mount, so scrolling back up to
+          // this section later doesn't replay it.
+          initial={{ y: '100%' }}
+          animate={{ y: 0 }}
+          transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+        >
           <motion.div className={styles.contentStack} style={{ marginTop: contentCenteringOffset }}>
             <div className={styles.masthead}>
               <motion.h1
