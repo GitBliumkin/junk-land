@@ -45,7 +45,7 @@ export default function TechStack() {
   // the header is centered as a block, so that position moves whenever the
   // header's own width (font size, viewport width) changes. Measuring it
   // directly (rather than guessing a value in CSS) is what keeps the two
-  // in sync; same ResizeObserver-on-a-ref pattern hero-section.tsx uses for
+  // in sync; same ResizeObserver-on-a-ref pattern about-me-section.tsx uses for
   // its own measured layout.
   const [listIndent, setListIndent] = useState(0);
 

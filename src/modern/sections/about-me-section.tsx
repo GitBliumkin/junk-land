@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import styles from './hero-section.module.css';
-import aboutMeImage from '../../../assets/modern/images/about-me.jpg';
+import styles from './about-me-section.module.css';
+import aboutMeImage from '../../assets/modern/images/about-me.jpg';
 
 // TODO: swap in real bio copy.
 const ABOUT_TEXT = [

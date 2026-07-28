@@ -77,7 +77,7 @@ export default function ExperienceCards() {
   // TechStack.tsx/.module.css) in and out instead of revealing them
   // continuously. The card's own text (.cardBody) stays at full opacity
   // throughout, landing visually between the dissolving backdrop and it.
-  const cardExitOpacity = useTransform(exitProgress, [0, 0.6], [1, 0]);
+  const cardExitOpacity = useTransform(exitProgress, [0, 0.3], [1, 0]);
 
   // Poster lines assemble first — top/bottom in from the right, middle from
   // the left — then hold in place, then the whole poster slides away as a
@@ -137,7 +137,7 @@ export default function ExperienceCards() {
               className={styles.card}
               key={image}
             >
-              <motion.div className={styles.cardBackdrop} style={{ opacity: cardExitOpacity }}>
+              <motion.div className={styles.cardBackdrop}>
                 <LazyImage
                   src={image}
                   alt=""

@@ -25,7 +25,7 @@
      hero's scroll animation (only height does), so a width-based scale
      can't fight the animation the way a height-based one did. The panel's
      own height is then measured from its rendered content in JS (see
-     hero-section.tsx), not guessed as a viewport percentage — so there's
+     about-me-section.tsx), not guessed as a viewport percentage — so there's
      nothing left to clip or leave lopsided regardless of screen size.
      The rem clamp() bounds are just an outer safety net, not the driver. */
   --modern-text-display: clamp(3rem, 8.5cqi, 20rem); /* name / hero headline */
