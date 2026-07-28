@@ -35,14 +35,15 @@
 }
 
 /* Sub-pixel layout rounding across this content-heavy page (many nested
-   fluid/cqi-sized elements) leaves the document's true scrollable height a
-   handful of pixels taller than the last section's own rendered box, in
+   fluid/cqi-sized elements) can leave the document's true scrollable height
+   a handful of pixels taller than the last section's own rendered box, in
    both dev and production builds — nothing paints that sliver, so it falls
-   through to the page's default (white) background. Matching body's
-   background to Education's bone tone, the last section on the page,
-   makes that sliver blend in instead of reading as a stray white gap.
-   Harmless on the retro route too: its layer is a fixed 100vw/100vh box
-   with its own opaque background, so body never shows through there. */
+   through to the page's default (white) background otherwise. Matching
+   body's background to ink (ContactMe's own fallback, and the color behind
+   most of the page) makes any such sliver blend in at the true end of the
+   page instead of reading as a stray white gap. Harmless on the retro route
+   too: its layer is a fixed 100vw/100vh box with its own opaque background,
+   so body never shows through there. */
 body {
-  background: var(--modern-color-bone);
+  background: var(--modern-color-ink);
 }

@@ -1,0 +1,164 @@
+/* Tall like TechStack's own .section: the extra height beyond .stage's 100vh
+   is what gives this section a scroll-driven hold once it finishes
+   assembling (see ContactMe.tsx's ASSEMBLE_END). Nothing sits underneath —
+   this is the last section — so the hold just means the finished layout is
+   what's on screen for the rest of the scroll to the true bottom of the
+   page, the same way it briefly is for TechStack before it hands off. */
+.section {
+  position: relative;
+  height: 200vh;
+  background: var(--modern-color-ink);
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  container-type: inline-size;
+  container-name: contactStage;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Grown via clip-path in JS (see ContactMe.tsx) from a hidden sliver at the
+   top edge down to these full bounds, so the photo reveals top-to-bottom
+   rather than popping in at once. */
+.imageReveal {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.backgroundImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: clamp(1.5rem, 4cqi, 4rem);
+}
+
+/* Rotated onto its side and run the section's full height, rather than
+   reading horizontally like the other sections' headers — writing-mode does
+   the rotation (text flows top-to-bottom, i.e. a horizontal line turned 90°
+   clockwise) instead of a transform, since a CSS transform would collide
+   with the rise-in animation's own translateY (both write to the same
+   `transform` property). Positioned absolutely (not as a flex sibling of
+   .details) so its own width never shifts .detailsWrap's true-center
+   position below. */
+.heading {
+  position: absolute;
+  left: clamp(1.5rem, 4cqi, 4rem);
+  top: 0;
+  bottom: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  font-family: var(--modern-font-heading);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: clamp(2.5rem, 9cqi, 8rem);
+  /* Black, not the usual bone/teal — this section sits directly on the
+     photo (no dark ink panel behind it). */
+  color: rgba(0, 0, 0, 0.78);
+}
+
+/* Centers .details on the stage itself (left/top 50% + its own -50%
+   translate) rather than in the flex space left over beside the heading —
+   so it sits at the true middle of the screen regardless of how wide the
+   heading column ends up. Kept separate from .details (rather than putting
+   the centering transform there directly) because .details is a
+   motion.div animating its own translateY — a static CSS `transform` on
+   that same element would be overwritten by framer-motion's inline one. */
+.detailsWrap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.5rem, 4cqi, 3rem);
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 3cqi, 2.5rem);
+}
+
+/* The site's signal-red accent (see theme.css), same as .pageLink's hover
+   treatment elsewhere in the modern layer — opacity is the hover feedback,
+   matching that same convention, rather than shifting the color itself. */
+.iconLink {
+  display: flex;
+  color: var(--modern-color-signal-red);
+  transition: opacity 0.2s ease;
+}
+
+.iconLink:hover {
+  opacity: 0.8;
+}
+
+.iconLink svg {
+  width: clamp(2rem, 4.5cqi, 3.25rem);
+  height: clamp(2rem, 4.5cqi, 3.25rem);
+  fill: currentColor;
+}
+
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.contactLink {
+  font-family: var(--modern-font-body);
+  font-weight: 600;
+  font-size: clamp(1.1rem, 2.2cqi, 1.6rem);
+  letter-spacing: 0.02em;
+  color: var(--modern-color-signal-red);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.contactLink:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 640px) {
+  /* No room for a full-height vertical column beside a centered details
+     block on a narrow screen — both drop back to normal document flow,
+     stacked in a centered column like every other section's header. */
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1rem, 4cqi, 2rem);
+  }
+
+  .heading {
+    position: static;
+    writing-mode: horizontal-tb;
+    font-size: clamp(2.5rem, 14cqi, 4.5rem);
+  }
+
+  .detailsWrap {
+    position: static;
+    transform: none;
+  }
+}
