@@ -139,6 +139,13 @@
   overflow: hidden;
 }
 
+.imageReveal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 21, 25, 0.7);
+}
+
 .imageRevealImg {
   width: 100%;
   height: 100%;
