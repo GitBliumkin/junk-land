@@ -11,7 +11,7 @@ import contactImage from '../../assets/modern/images/contact-me.jpg';
 // section's slide-away uncovers it underneath.
 export default function Education() {
   return (
-    <section className={styles.section}>
+    <section id="education" className={styles.section}>
       <div className={styles.stage}>
         <div className={styles.content}>
           <h2 className={styles.heading} style={{ backgroundImage: `url(${contactImage})` }}>

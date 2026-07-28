@@ -61,7 +61,7 @@ export default function ContactMe() {
   const detailsY = useTransform(assembleProgress, (p) => 20 * (1 - detailsProgress(p)));
 
   return (
-    <section ref={sectionRef} className={styles.section}>
+    <section ref={sectionRef} id="contact-me" className={styles.section}>
       <div className={styles.stage}>
         <div
           aria-hidden="true"

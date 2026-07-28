@@ -125,7 +125,7 @@ export default function HeroSection() {
   );
 
   return (
-    <section ref={sectionRef} className={styles.hero}>
+    <section ref={sectionRef} id="about-me" className={styles.hero}>
       <div ref={stageRef} className={styles.stage}>
         <img src={aboutMeImage} alt="" className={styles.backgroundImage} draggable={false} />
         <motion.div ref={glassBlockRef} className={styles.glassBlock} style={{ height: blockHeight }}>

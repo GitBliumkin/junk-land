@@ -79,12 +79,12 @@
 
 .location {
   font-size: 0.85rem;
-  color: var(--modern-color-ash);
+  color: var(--modern-color-bone);
 }
 
 .dateRange {
   font-size: 0.8rem;
-  color: var(--modern-color-ash);
+  color: var(--modern-color-bone);
 }
 
 .techStack {

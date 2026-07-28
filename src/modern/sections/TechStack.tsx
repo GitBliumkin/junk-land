@@ -5,10 +5,10 @@ import techImage from '../../assets/modern/images/technologies.jpg';
 
 const TECH_STACK = [
   { category: 'Languages', items: 'Java, TypeScript, JavaScript, Scala' },
-  { category: 'Backend', items: 'Spring Boot, NestJS, Microservices, REST APIs' },
+  { category: 'Backend', items: 'Spring Boot, NestJS, Microservices, REST/SOAP APIs' },
   { category: 'Frontend', items: 'Angular, React, HTML5, CSS3' },
-  { category: 'Databases', items: 'PostgreSQL, MySQL, DynamoDB, MongoDB' },
-  { category: 'Messaging', items: 'Kafka, IBM MQ, Redis' },
+  { category: 'Databases', items: 'PostgreSQL, MySQL, DynamoDB, MongoDB, Redis' },
+  { category: 'Messaging', items: 'Kafka, IBM MQ, Redis Pub/Sub' },
   { category: 'Cloud & DevOps', items: 'AWS, Docker, CI/CD, Jenkins' },
   { category: 'Tools', items: 'OpenSearch, Elasticsearch, Git, Jira' },
   { category: 'AI Tooling', items: 'GitHub Copilot, Claude' },
@@ -115,7 +115,7 @@ export default function TechStack() {
   const rotate = useTransform(assembleProgress, [0, 1], [45, 0]);
 
   return (
-    <section ref={sectionRef} className={styles.section}>
+    <section ref={sectionRef} id="technologies" className={styles.section}>
       <div className={styles.stage}>
         <div ref={contentRef} className={styles.content}>
           <header className={styles.header}>

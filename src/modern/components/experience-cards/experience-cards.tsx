@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import styles from './experience-cards.module.css';
 import LazyImage from '../lazy-image/lazy-image';
 import { EXPERIENCE } from '../../../data/experience';
+import { POSTER_ASSEMBLE_END, POSTER_HOLD_END, HOLD_SHARE } from './experience-scroll';
 import experienceImage1 from '../../../assets/modern/images/expiriance-1.jpg';
 import experienceImage2 from '../../../assets/modern/images/experiance-2.jpg';
 import experienceImage3 from '../../../assets/modern/images/expepiriance-3.jpg';
@@ -12,29 +13,6 @@ const CARDS = [
   { image: experienceImage2, blurred: false, entry: EXPERIENCE[1] },
   { image: experienceImage3, blurred: true, entry: EXPERIENCE[2] },
 ];
-
-// Poster timing, as fractions of the container's total scroll range:
-//   [0, POSTER_ASSEMBLE_END]   — the three lines slide into place.
-//   [POSTER_ASSEMBLE_END, POSTER_HOLD_END] — fully assembled and held
-//     static (the outer row transform below doesn't start until
-//     POSTER_HOLD_END), which is what actually produces the "pinned in
-//     place for a while" feel — without this gap, the row would start
-//     sliding the instant the lines finished assembling, with no true
-//     dwell in between.
-//   [POSTER_HOLD_END, 1] — the whole assembled poster slides away with the
-//     rest of the row as the cards take its place.
-const POSTER_ASSEMBLE_END = 0.15;
-const POSTER_HOLD_END = 0.35;
-
-// The [POSTER_HOLD_END, 1] range is divided into one equal slice per card;
-// within each slice, the row slides from the previous card's centered
-// position to this card's (the "transit"), then sits still there (the
-// "hold") until the slice ends — so every card gets a dwell at center
-// before the next one starts sliding in, rather than one continuous slide
-// straight through all three. The last card's hold simply runs to the end
-// of the range, so scrolling further releases the sticky stage into
-// whatever comes after this section.
-const HOLD_SHARE = 0.55;
 
 export default function ExperienceCards() {
   const containerRef = useRef<HTMLElement>(null);
@@ -130,7 +108,7 @@ export default function ExperienceCards() {
   });
 
   return (
-    <section ref={containerRef} className={styles.container}>
+    <section ref={containerRef} id="experience" className={styles.container}>
       <div ref={stageRef} className={styles.stage}>
         <motion.div className={styles.stageFill} style={{ opacity: cardExitOpacity }} />
         <motion.div ref={rowRef} className={styles.row} style={{ x }}>

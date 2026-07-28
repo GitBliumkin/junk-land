@@ -1,6 +1,6 @@
-import mcProLogo from '../assets/modern/images/mc-pro-logo-trimmed.png';
-import viewbidLogo from '../assets/modern/images/viewbid-logo-trimmed.png';
-import fiservLogo from '../assets/modern/images/fiserv-logo-trimmed.png';
+import mcProLogo from '../assets/modern/images/mc-pro-logo.png';
+import viewbidLogo from '../assets/modern/images/viewbid-logo.png';
+import fiservLogo from '../assets/modern/images/fiserv-logo.png';
 
 export interface ExperienceEntry {
   id: string;
@@ -27,12 +27,12 @@ export const EXPERIENCE: ExperienceEntry[] = [
     dateRange: 'Apr 2025 – Apr 2026',
     overview: 'A SaaS platform nonprofits use to run their websites and manage invoicing and donations.',
     bullets: [
-      'Architected a distributed invoice history logging system, designing backend services and data models to track invoice lifecycle events across <strong>microservices</strong>',
-      'Implemented a <strong>Kafka-based event-driven pipeline</strong> to guarantee reliable invoice state propagation and eliminate cross-service inconsistencies',
+      'Architected a distributed <strong>invoice history logging system</strong>, designing backend services and data models to track invoice lifecycle events across <strong>microservices</strong>',
+      'Implemented a <strong>Kafka</strong>-based event-driven pipeline to guarantee reliable invoice state propagation and eliminate cross-service inconsistencies',
       'Designed and executed database schema migrations and production data backfills as part of a blue-green deployment, coordinating Kafka consumer updates for <strong>zero-downtime releases</strong>',
-      'Resolved complex production incidents across microservices, Kafka consumers, and database layers, reducing mean time to resolution',
-      'Built Zapier automation triggers that reduced billing-related incidents to <strong>zero</strong>',
-      'Modernized Angular invoice UI to align with updated design standards, improving usability',
+      'Resolved complex production incidents across microservices, <strong>Kafka</strong> consumers, and database layers, reducing mean time to resolution',
+      'Built <strong>Zapier</strong> automation triggers that reduced billing-related incidents to <strong>zero</strong>',
+      'Modernized <strong>Angular</strong> invoice UI to align with updated design standards, improving usability',
     ],
   },
   {
@@ -46,11 +46,11 @@ export const EXPERIENCE: ExperienceEntry[] = [
     dateRange: 'Mar 2024 – Mar 2025',
     overview: 'A live online auction platform where users bid against each other in real time, similar to eBay.',
     bullets: [
-      'Built scalable REST APIs with NestJS and PostgreSQL powering high-frequency bidding for <strong>21,000+ global users</strong>',
-      'Developed full-stack auction features including auction management, user profiles, and bidding views using Angular',
-      'Optimized concurrent database queries to maintain consistency under simultaneous bidding load',
-      'Leveraged Redis Pub/Sub for asynchronous event propagation across services, enabling <strong>real-time bid updates</strong> at scale',
-      'Deployed and maintained containerized microservices on AWS using Docker and CI/CD pipelines',
+      'Built scalable <strong>REST APIs</strong> with <strong>NestJS</strong> and <strong>PostgreSQL</strong> powering high-frequency bidding for <strong>21,000+ global users</strong>',
+      'Developed full-stack auction features including auction management, user profiles, and bidding views using <strong>Angular</strong>',
+      'Optimized concurrent <strong>database queries</strong> to maintain consistency under simultaneous bidding load',
+      'Leveraged <strong>Redis Pub/Sub</strong> for asynchronous event propagation across services, enabling <strong>real-time bid updates</strong> at scale',
+      'Deployed and maintained containerized microservices on <strong>AWS</strong> and <strong>CI/CD pipelines</strong>',
     ],
   },
   {
@@ -66,9 +66,9 @@ export const EXPERIENCE: ExperienceEntry[] = [
       'A real-time payments gateway banks use to move money between each other instantly instead of waiting days for transfers to settle.',
     bullets: [
       "Developed backend transaction processing pipeline for Fiserv's NOW Gateway, reducing payment settlement time from <strong>1–3 days to seconds</strong><br />via ISO format normalization, validation, and routing through The Clearing House RTP network",
-      'Built services processing <strong>100,000+ transactions monthly</strong> across 5,000+ financial institutions using Java (Spring Boot), integrated Kafka and IBM MQ for asynchronous communication',
-      'Designed real-time monitoring dashboard tracking transaction throughput, success rates, and system failures across financial institutions',
-      'Implemented SQL-driven test automation harness enabling support teams to simulate and validate real transaction scenarios',
+      'Built services processing <strong>100,000+ transactions monthly</strong> across <strong>5,000+ financial</strong> institutions using <strong>Java (Spring Boot)</strong>, integrated <strong>Kafka</strong> and <strong>IBM MQ</strong> for asynchronous communication',
+      'Designed <strong>real-time monitoring dashboard</strong> tracking transaction throughput, success rates, and system failures across financial institutions',
+      'Implemented <strong>SQL-driven test</strong> automation harness enabling support teams to simulate and validate real transaction scenarios',
     ],
   },
 ];

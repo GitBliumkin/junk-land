@@ -47,3 +47,17 @@
 body {
   background: var(--modern-color-ink);
 }
+
+/* Native scrollbar hidden outright — ScrollProgress (see
+   scroll-progress.tsx) renders its own fixed-position indicator instead, so
+   there's no reserved-gutter native bar competing with it. Retro route never
+   scrolls the document at all (its layer is a fixed 100vw/100vh box with
+   overflow: hidden — see retro-layer.module.css), so this is harmless there
+   too. */
+html {
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}

@@ -115,7 +115,6 @@
   height: 0.78em;
   aspect-ratio: 3 / 2;
   object-fit: cover;
-  border: 1px solid var(--modern-color-slate);
 }
 
 /* Fixed (not content-driven) width and height — every card renders at the
@@ -279,12 +278,12 @@
 
 .cardLocation {
   font-size: clamp(1rem, 1.05vw, 1.3rem);
-  color: var(--modern-color-ash);
+  color: var(--modern-color-bone);
 }
 
 .cardDate {
   font-size: clamp(0.95rem, 1vw, 1.25rem);
-  color: var(--modern-color-ash);
+  color: var(--modern-color-bone);
 }
 
 .cardTechStack {
@@ -347,7 +346,7 @@
 }
 
 .cardPageLink {
-  align-self: center;
+  align-self: right;
   display: inline-block;
   margin: 0;
   padding-bottom: 3px;
@@ -356,7 +355,7 @@
   text-transform: uppercase;
   letter-spacing: 0.03em;
   font-size: clamp(1.3rem, 2.2vw, 2rem);
-  color: var(--modern-color-ember);
+  color: var(--modern-color-bone);
   text-decoration: none;
   border-bottom: 1px solid currentColor;
 }

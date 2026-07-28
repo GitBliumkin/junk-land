@@ -1,0 +1,95 @@
+/* Fixed, not absolute/sticky — like ScrollProgress (see
+   scroll-progress.module.css), taken out of flow entirely so it never
+   reserves space or shifts any layout underneath it. */
+.nav {
+  position: fixed;
+  top: 1rem;
+  right: 1.75rem;
+  z-index: 200;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  column-gap: 1.75rem;
+  row-gap: 0.6rem;
+  max-width: min(90vw, 48rem);
+  /* Lets clicks fall through the gaps between items (and the empty space
+     around them) to whatever's underneath — only the items themselves
+     (and the dropdown) opt back in below. */
+  pointer-events: none;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  column-gap: 1.75rem;
+  row-gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.divider {
+  align-self: center;
+  width: 1px;
+  height: 0.85rem;
+  background: var(--modern-color-ash);
+  opacity: 0.5;
+}
+
+/* Shared "just text with an underline" treatment for every nav item —
+   buttons and anchors alike render identically, so Retro/Download CV
+   (real links) read as the same kind of control as the scroll-to buttons. */
+.link {
+  pointer-events: auto;
+  appearance: none;
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 2px;
+  font-family: var(--modern-font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-decoration: none;
+  color: var(--modern-color-bone);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.link:hover,
+.link[aria-expanded='true'] {
+  color: var(--modern-color-ash);
+}
+
+.dropdownWrap {
+  position: relative;
+  pointer-events: auto;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  row-gap: 0.6rem;
+}
+
+@media (max-width: 640px) {
+  .nav {
+    top: 1rem;
+    right: 1rem;
+    column-gap: 1.25rem;
+  }
+
+  .group {
+    column-gap: 1.25rem;
+  }
+
+  .link {
+    font-size: 0.75rem;
+  }
+}
