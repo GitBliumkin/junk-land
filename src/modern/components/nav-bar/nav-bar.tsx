@@ -5,10 +5,6 @@ import { getExperienceCardScrollProgress } from '../experience-cards/experience-
 import { setUrlHash } from '../../../shared/url-hash';
 import { RESUME_PATH } from '../../../shared/resume';
 
-// Order matches CARDS in experience-cards.tsx (== EXPERIENCE[0..2]), so index
-// here lines up directly with the index passed to getExperienceCardScrollProgress.
-// hash is this item's address in the URL (see setUrlHash/SECTION_ACTIONS below) —
-// there's no separate DOM id per card to reuse, so these are made up.
 const EXPERIENCE_DROPDOWN_ITEMS = [
   { label: 'MC Pro', hash: 'experience-mc-pro' },
   { label: 'Viewbid', hash: 'experience-viewbid' },
@@ -16,22 +12,10 @@ const EXPERIENCE_DROPDOWN_ITEMS = [
 ];
 
 const SECTION_LINKS = [
-  // Technologies' own element starts 100vh before it visually reads as
-  // "revealed" — see tech-stack.module.css's margin-top: -100vh, which pulls
-  // its box back to where ExperienceCards' pin releases so its sticky stage
-  // is already stuck (and ready) underneath the last experience card while
-  // that card is still fading out on top of it (see experience-cards.tsx's
-  // cardExitOpacity). Landing at the bare top of the element would leave
-  // that fading card visually blocking it, so this jumps one viewport
-  // height further in, past the handoff, to where it's actually clear.
   { id: 'technologies', label: 'Technologies', extraViewportHeights: 1 },
   { id: 'education', label: 'Education', extraViewportHeights: 0 },
 ];
 
-// About Me and Contact Me's hashes double as their section's real DOM id
-// (see sections/about-me/about-me.tsx / sections/contact-me/contact-me.tsx);
-// Experience's cards don't have one each, hence EXPERIENCE_DROPDOWN_ITEMS
-// carrying its own made-up hashes.
 const ABOUT_ME_HASH = 'about-me';
 const CONTACT_ME_HASH = 'contact-me';
 
@@ -42,13 +26,7 @@ function scrollToId(id: string, extraViewportHeights = 0, instant = false) {
   window.scrollTo({ top: targetY, behavior: instant ? 'auto' : 'smooth' });
 }
 
-// About Me is pinned (see sections/about-me/about-me.tsx) for its own scroll range —
-// jumping to its bare element top lands at the very start of that range,
-// before the panel has expanded to full-screen or the bio text has revealed
-// (i.e. the collapsed masthead-only look). EXPAND_END there is 0.6 (panel
-// reaches full-screen and text finishes revealing by raw progress 0.45); this
-// targets 0.75, safely inside the hold that follows, so "About Me" always
-// lands on the fully-opened, full-screen state instead of the collapsed one.
+
 const ABOUT_ME_OPENED_PROGRESS = 0.75;
 
 function scrollToAboutMeOpened(instant = false) {
@@ -66,20 +44,11 @@ function scrollToAboutMeOpened(instant = false) {
   window.scrollTo({ top: targetY, behavior: instant ? 'auto' : 'smooth' });
 }
 
-// Contact Me is the last section on the page and holds its fully-assembled
-// layout for the remainder of the document's scroll (see sections/contact-me/contact-me.tsx) —
-// so "the end" of that section really means the true bottom of the page,
-// not just its element's top edge.
 function scrollToBottom(instant = false) {
   const targetY = document.documentElement.scrollHeight - window.innerHeight;
   window.scrollTo({ top: targetY, behavior: instant ? 'auto' : 'smooth' });
 }
 
-// Experience's cards aren't separate scroll targets in the document — a
-// single pinned stage horizontally transitions between them based on how far
-// you've scrolled through the section (see experience-cards.tsx) — so
-// jumping to one means computing the scrollY that lands mid-way through that
-// card's own hold window, not just scrolling an element into view.
 function scrollToExperienceCard(index: number, instant = false) {
   const container = document.getElementById('experience');
   if (!container) return;
@@ -95,10 +64,6 @@ function scrollToExperienceCard(index: number, instant = false) {
   window.scrollTo({ top: targetY, behavior: instant ? 'auto' : 'smooth' });
 }
 
-// Single registry mapping a URL hash back to the scroll action that lands on
-// it — drives both the initial-load restore and popstate (back/forward)
-// handling below, built from the same arrays the nav buttons render from so
-// there's one source of truth for "what hash goes where".
 const SECTION_ACTIONS: Record<string, (instant?: boolean) => void> = {
   [ABOUT_ME_HASH]: (instant) => scrollToAboutMeOpened(instant),
   [CONTACT_ME_HASH]: (instant) => scrollToBottom(instant),
@@ -116,16 +81,8 @@ const SECTION_ACTIONS: Record<string, (instant?: boolean) => void> = {
   ),
 };
 
-// How long the nav stays hidden after scrolling stops before it reappears.
 const SCROLL_IDLE_DELAY_MS = 1000;
-
-// ScrollProgress's own track (see scroll-progress.module.css) is a hairline
-// 4px wide, right: 0.5rem from the edge — too thin to reliably hover. This
-// widens the *hover hit-zone* (not the visual track) to a generous strip
-// along the right edge so mousing anywhere near the scrollbar counts.
 const SCROLLBAR_HOVER_ZONE_PX = 32;
-// Extra slack around the nav's own (possibly hidden/translated) rect so
-// approaching it from just outside its edge still counts as a hover.
 const NAV_HOVER_PADDING_PX = 12;
 
 export default function NavBar() {
@@ -156,11 +113,6 @@ export default function NavBar() {
 
   useEffect(() => {
     let idleTimer: ReturnType<typeof setTimeout>;
-    // Education is the one section with a light (--modern-color-bone)
-    // background instead of the page's dark ink (see sections/education/education.module.css);
-    // its .stage is sticky-pinned full-screen for the section's whole scroll
-    // range, so the nav sits over that light background for as long as the
-    // section's element spans the very top of the viewport.
     const educationEl = document.getElementById('education');
 
     const handleScroll = () => {
@@ -219,10 +171,6 @@ export default function NavBar() {
       action?.(instant);
     };
 
-    // Every action above measures real layout (container heights, image-
-    // driven section heights) — not settled yet at mount, so an initial
-    // #hash is only consumed once the page (images, fonts) fully loads,
-    // landing instantly rather than animating a long scroll on page load.
     const handleLoad = () => applyHash(true);
     if (document.readyState === 'complete') {
       handleLoad();
@@ -230,8 +178,6 @@ export default function NavBar() {
       window.addEventListener('load', handleLoad, { once: true });
     }
 
-    // Browser back/forward changes the hash without a click, but should
-    // still land on the matching section, smoothly like a click would.
     const handlePopState = () => applyHash(false);
     window.addEventListener('popstate', handlePopState);
 

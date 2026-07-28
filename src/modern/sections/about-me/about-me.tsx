@@ -3,39 +3,19 @@ import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import styles from './about-me.module.css';
 import aboutMeImage from '../../../assets/modern/images/about-me.jpg';
 
-// TODO: swap in real bio copy.
 const ABOUT_TEXT = [
   "Nikita, nice to meet you. I'm a full-stack software engineer based in Toronto. I got into this industry 5 years ago, and what drives me isn't just delivering good work — it's making a real impact and helping the people I work with actually achieve their vision.",
   "Professionally, I've been fortunate to work on some pretty large-scale platforms and design backend systems. I've always stayed agile when it comes to stack, but I'm mostly known for my Spring Boot + Angular projects wired up with Kafka pipelines. My biggest passion is exploring macro architecture, learning from the best in the space to eventually grow into a System Architect role.",
   "Outside of work, I'm into art — street photography especially. If a gallery opening or a show pops up last minute, I'm probably already searching for my ticket.",
 ];
 
-// framer-motion 12 + React 19: writing a raw scroll-jump value straight to a
-// non-transform, non-layout CSS property (opacity) doesn't reach the DOM.
-// Routing through useSpring runs it through the normal animation frameloop
-// instead, which writes correctly — kept snappy so it still reads scroll-linked.
 const REVEAL_SPRING = { stiffness: 1000, damping: 100 };
-
-// This section is pinned (see .stage's position: sticky) for its own scroll
-// range, same mechanic as TechStack/ContactMe — [0, EXPAND_END] of that
-// pinned range is spent expanding the panel to full-screen, then it holds
-// at full size for the rest of the range before releasing the pin and
-// handing off to ExperienceCards. Without a hold, the panel used to reach
-// full screen at the exact instant the pin released, so it never actually
-// read as "full screen" before the next section started sliding in.
 const EXPAND_END = 0.6;
 
 export default function AboutMe() {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const glassBlockRef = useRef<HTMLDivElement>(null);
-
-  // Hidden probes mirror the masthead's markup/classes so they resolve the
-  // same container-relative (cqi) font sizes, but are never touched by the
-  // scroll-driven shrink animation below. Measuring from the *live* masthead
-  // instead created a feedback loop: shrinking it changed its own size,
-  // which re-triggered the resize observer, which re-measured the
-  // already-shrunk size as the new "natural" baseline, spiraling to zero.
   const mastheadProbeRef = useRef<HTMLDivElement>(null);
   const nameProbeRef = useRef<HTMLHeadingElement>(null);
   const roleProbeRef = useRef<HTMLSpanElement>(null);
@@ -45,11 +25,6 @@ export default function AboutMe() {
   const [stageHeight, setStageHeight] = useState(0);
   const [nameFontPx, setNameFontPx] = useState(0);
   const [roleFontPx, setRoleFontPx] = useState(0);
-  // Content height once fully settled (masthead shrunk + about text
-  // revealed), used to center the content when the fully-expanded panel
-  // (which always reaches the stage's full height) ends up taller than
-  // what it holds — otherwise that slack collects as dead space below the
-  // paragraph on tall screens instead of splitting evenly top and bottom.
   const [settledContentHeight, setSettledContentHeight] = useState(0);
 
   useLayoutEffect(() => {
@@ -66,9 +41,6 @@ export default function AboutMe() {
       const verticalPadding = parseFloat(blockCs.paddingTop) + parseFloat(blockCs.paddingBottom);
       const stageH = stageEl.offsetHeight;
       setStageHeight(stageH);
-      // Capped to the stage's own height so on very short viewports, where
-      // the masthead alone can't fully fit, it clips gracefully rather than
-      // pushing the panel taller than the viewport itself.
       setCollapsedHeight(Math.min(mastheadProbeEl.offsetHeight + verticalPadding, stageH));
       setNameFontPx(parseFloat(getComputedStyle(nameProbeEl).fontSize));
       setRoleFontPx(parseFloat(getComputedStyle(roleProbeEl).fontSize));
@@ -80,10 +52,6 @@ export default function AboutMe() {
     };
 
     measure();
-    // Only the stage (i.e. container width) is watched — it's the sole
-    // external driver of these values via the cqi-based type scale. The
-    // live text content's own box size never changes (only its opacity and
-    // position do), so reading it here on stage resize is safe too.
     const observer = new ResizeObserver(measure);
     observer.observe(stageEl);
     return () => observer.disconnect();
@@ -94,32 +62,12 @@ export default function AboutMe() {
     offset: ['start start', 'end end'],
   });
 
-  // Expanding (panel growth, masthead shrink, text reveal) happens over
-  // [0, EXPAND_END] of the pinned range; this remaps that sub-range to a
-  // full 0-1 so the existing per-element timings below don't need to know
-  // about the hold that follows — they just clamp at their fully-expanded
-  // state once raw progress passes EXPAND_END, for the rest of the pin.
   const expandProgress = useTransform(scrollYProgress, (p) => Math.min(1, p / EXPAND_END));
-
-  // The panel expands from its resting content height to the full stage
-  // height, so it always fully covers the viewport by the end of the
-  // expand phase instead of stopping short and leaving a strip of the
-  // photo visible.
   const blockHeight = useTransform(expandProgress, [0, 1], [collapsedHeight, stageHeight]);
-
-  // Shrinking the masthead as you scroll frees up vertical room for the
-  // about text, so the fully expanded panel doesn't need to out-grow the
-  // viewport to fit everything on shorter screens without clipping.
   const nameFontSize = useTransform(expandProgress, [0, 0.4], [nameFontPx, nameFontPx * 0.45]);
   const roleFontSize = useTransform(expandProgress, [0, 0.4], [roleFontPx, roleFontPx * 0.75]);
-
   const textOpacity = useSpring(useTransform(expandProgress, [0.35, 0.75], [0, 1]), REVEAL_SPRING);
   const textY = useSpring(useTransform(expandProgress, [0.35, 0.75], [32, 0]), REVEAL_SPRING);
-
-  // Zero for as long as the panel is smaller than (or equal to) its content
-  // — i.e. throughout the resting/top-aligned look — and only grows once
-  // the panel has expanded past what the content needs, splitting the
-  // slack evenly above and below instead of letting it pool at the bottom.
   const contentCenteringOffset = useTransform(blockHeight, (height) =>
     Math.max(0, (height - settledContentHeight) / 2),
   );
@@ -132,12 +80,6 @@ export default function AboutMe() {
           ref={glassBlockRef}
           className={styles.glassBlock}
           style={{ height: blockHeight }}
-          // One-time entrance on page load — separate from the scroll-driven
-          // height above, this just slides the panel up from below .stage's
-          // own overflow:hidden edge (see about-me.module.css), so it
-          // reads as rising into place rather than simply being there.
-          // initial/animate only plays once on mount, so scrolling back up to
-          // this section later doesn't replay it.
           initial={{ y: '100%' }}
           animate={{ y: 0 }}
           transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}

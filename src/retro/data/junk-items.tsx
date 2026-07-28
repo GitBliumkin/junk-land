@@ -17,7 +17,6 @@ import webmasterCrossing from '../../assets/retro/gifs/nav-side/webmaster-crossi
 export interface JunkItem {
   id: string;
   Component: React.ComponentType;
-  /** Which side panel to render into. Omit to render in the center column. */
   placement?: 'left' | 'right';
 }
 
@@ -34,11 +33,8 @@ export const JUNK_ITEMS: JunkItem[] = [
   { id: 'nav-section', Component: NavSection },
   { id: 'flame-bar', Component: FlameBar },
 
-  // left side panel: badge, then Thank You gif, stacked and centered around the nav section
   gifItem('official-site-badge', officialSiteBadge, 208, 'left'),
   gifItem('thanks-for-visiting', thanksForVisiting, 208, 'left'),
-
-  // right side panel: centered on the nav section
   gifItem('webmaster-crossing', webmasterCrossing, 182, 'right'),
 ];
 
@@ -47,34 +43,25 @@ export interface ExperiencePage {
   company: string;
   location: string;
   dates: string;
-  /** Client project context, when the role spans multiple engagements (e.g. a consulting firm). */
+  
   subtext?: string;
-  /** Project/product website, shown as a link button beside the header. */
   link?: string;
   bullets: string[];
-  /** Stable URL hash for this page — shares its naming with the modern
-   *  layer's Experience dropdown (see modern/components/nav-bar/nav-bar.tsx)
-   *  so both layers address the same role under the same URL. */
   hash: string;
 }
 
 export interface SectionItem {
   id: string;
   title: string;
-  /** Each entry renders as its own line in the section panel. Ignored when `pages` is set. */
   lines?: string[];
-  /** Optional badge/logo rendered beside the lines. */
   image?: {
     src: string;
     alt: string;
     outlineSrc?: string;
     framed?: boolean;
-    /** Buttons rendered below a framed image, same width as the frame. */
     links?: { label: string; href: string }[];
   };
-  /** Plain small logos rendered to the right of the lines (no frame/outline). */
   images?: { src: string; alt: string }[];
-  /** If set, the section paginates through these instead of rendering `lines`. */
   pages?: ExperiencePage[];
 }
 

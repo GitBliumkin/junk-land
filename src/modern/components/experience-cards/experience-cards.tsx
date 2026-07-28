@@ -19,11 +19,6 @@ export default function ExperienceCards() {
   const stageRef = useRef<HTMLDivElement>(null);
   const rowRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  // translateX needed to center each card in the stage, measured from the
-  // cards' own natural (untransformed) layout position — offsetLeft is
-  // unaffected by the x transform below, since CSS transforms don't move
-  // an element in normal flow, only how it paints.
   const [cardCenters, setCardCenters] = useState<number[]>([]);
 
   useLayoutEffect(() => {
@@ -37,9 +32,6 @@ export default function ExperienceCards() {
       const centers = cardRefs.current.map((cardEl) => {
         if (!cardEl) return 0;
         const center = stageWidth / 2 - (cardEl.offsetLeft + cardEl.offsetWidth / 2);
-        // Never ask to translate further than the row actually extends —
-        // centering the last card can otherwise overshoot into the empty
-        // space reserved by .row's own padding-right past it.
         return Math.max(center, -maxTranslate);
       });
       setCardCenters(centers);
@@ -57,39 +49,15 @@ export default function ExperienceCards() {
     offset: ['start start', 'end end'],
   });
 
-  // A second, separate scroll source for the exit itself: 'end end' (the
-  // container's bottom reaches the viewport bottom — the instant the pin
-  // above releases) to 'end start' (that same bottom reaches the viewport
-  // top — fully scrolled past) brackets exactly the container's own
-  // slide-away, independent of scrollYProgress above, which is already
-  // pinned at 1 by then and doesn't track this part of the scroll.
   const { scrollYProgress: exitProgress } = useScroll({
     target: containerRef,
     offset: ['end end', 'end start'],
   });
 
-  // Fades out early in the exit slide (not across the whole thing): the
-  // card's own backdrop (photo + shade, not .cardBody — see .cardBackdrop
-  // below) *and* .stageFill, the ink that otherwise fills the rest of the
-  // stage around and below the card. Both share this one value so they
-  // dissolve in lockstep — fading only the card would leave that
-  // surrounding ink solid, cutting TechStack's already-stuck rows (see
-  // TechStack.tsx/.module.css) in and out instead of revealing them
-  // continuously. The card's own text (.cardBody) stays at full opacity
-  // throughout, landing visually between the dissolving backdrop and it.
   const cardExitOpacity = useTransform(exitProgress, [0, 0.3], [1, 0]);
-
-  // Poster lines assemble first — top/bottom in from the right, middle from
-  // the left — then hold in place, then the whole poster slides away as a
-  // single unit along with the rest of the row as the cards take its place.
   const fromRightX = useTransform(scrollYProgress, [0, POSTER_ASSEMBLE_END], ['100%', '0%']);
   const fromLeftX = useTransform(scrollYProgress, [0, POSTER_ASSEMBLE_END], ['-100%', '0%']);
 
-  // Function form (not the array-range form) deliberately — see the note
-  // on TechStack's TechRow component: useTransform(value, [a, b], [c, d])
-  // hands narrow sub-ranges of a scroll-linked value off to a native
-  // "accelerated" path that doesn't hold its end value correctly, which
-  // this piecewise hold/transit logic depends on.
   const x = useTransform(scrollYProgress, (p) => {
     if (p <= POSTER_HOLD_END || cardCenters.length === 0) return 0;
 

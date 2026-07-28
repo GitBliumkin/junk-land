@@ -35,10 +35,6 @@
   right: 0;
   bottom: 0;
   overflow: hidden;
-  /* Height comes from JS (see about-me.tsx) measuring .contentStack's
-     actual rendered size — not a guessed viewport percentage. That's what
-     makes the top/bottom padding symmetric and guarantees a fit on any
-     screen, since the box is always exactly as tall as its content. */
   padding: clamp(1.25rem, 3cqi, 3rem);
   background: rgba(20, 21, 25, 0.55);
   backdrop-filter: blur(20px) saturate(140%);

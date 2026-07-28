@@ -14,12 +14,8 @@ const LEFT_ITEM_RIGHT = 28;
 const RIGHT_ITEM_LEFT = 28;
 const FREEZE_SETTLE_MS = 200;
 const ENTER_STAGGER_S = 0.3;
-// Gives the last item's fling-to-bin animation time to finish before the screen goes black.
 const EXPLOSION_DELAY_MS = 400;
-// How long the black screen + explosion gif stays up before navigating away.
 const EXPLOSION_DURATION_MS = 1800;
-// Side columns finish appearing before the central column starts, so JUNK_ITEMS' declaration
-// order (center items first) can't be used directly as the stagger order.
 const ENTER_ORDER = [
   ...JUNK_ITEMS.filter((item) => item.placement),
   ...JUNK_ITEMS.filter((item) => !item.placement),
@@ -55,10 +51,6 @@ export default function RetroLayer() {
   const sidePanelRightRef = useRef<HTMLDivElement>(null);
   const centerContentRef = useRef<HTMLDivElement>(null);
   const frozenRef = useRef(false);
-  // The stage is scaled via CSS transform to fit the viewport; without this, framer-motion's
-  // drag math runs in unscaled coordinates, so on smaller (more scaled-down) screens dragged
-  // items lag behind the cursor instead of following it 1:1. Built lazily in an effect since
-  // reading the ref must happen outside of render.
   const [transformPagePoint, setTransformPagePoint] = useState<((point: { x: number; y: number }) => { x: number; y: number }) | undefined>(
     undefined
   );
@@ -71,14 +63,6 @@ export default function RetroLayer() {
   const [frozen, setFrozen] = useState<FrozenLayout | null>(null);
   const [scale, setScale] = useState(1);
   const [exploding, setExploding] = useState(false);
-
-  // Reset synchronously during render (before the clearedIds selector below reads the
-  // store), not in an effect: the measurement effect further down runs on mount and only
-  // ever captures nav-section/gif elements once. If reset ran in an effect instead, the
-  // first commit — and thus that one-time capture — would still see whatever stale
-  // clearedIds the store carried over from a previous playthrough (e.g. after completing
-  // the game, navigating away, then hitting the browser back button), leaving items
-  // pinned at their fallback top-of-column position until an unrelated trigger corrects it.
   const didResetRef = useRef(false);
   if (!didResetRef.current) {
     didResetRef.current = true;
@@ -101,11 +85,6 @@ export default function RetroLayer() {
     }
   }, [clearedIds]);
 
-  // The whole page is measured once (after assets/fonts settle) and then frozen into a
-  // fixed-size canvas: every item — including the bin — gets a permanent absolute position,
-  // so dragging one to the trash never reflows the rest or shrinks the page. Until that
-  // first freeze, items render in normal flow (today's dynamic nav-centered layout) purely
-  // so their natural sizes/positions can be measured.
   useLayoutEffect(() => {
     const sidePanel = sidePanelRef.current;
     const sidePanelRight = sidePanelRightRef.current;
@@ -125,8 +104,6 @@ export default function RetroLayer() {
       const navSectionRect = navSection.getBoundingClientRect();
       const navSectionCenter = navSectionRect.top + navSectionRect.height / 2;
 
-      // Official-site badge + Thank You gif: stacked, centered as a group on the nav section
-      // (badge slightly above center, Thank You gif below it).
       if (sidePanel && leftBadges.length === 2) {
         const sidePanelRect = sidePanel.getBoundingClientRect();
         const [topBadge, bottomBadge] = leftBadges;
@@ -141,7 +118,6 @@ export default function RetroLayer() {
         });
       }
 
-      // Webmaster-crossing sits alone, centered on the nav section.
       if (sidePanelRight && rightBadges.length === 1) {
         const sidePanelRightRect = sidePanelRight.getBoundingClientRect();
         const badgeHeight = rightBadges[0].getBoundingClientRect().height;
@@ -149,7 +125,6 @@ export default function RetroLayer() {
         setRightItemTops({ 'webmaster-crossing': Math.max(0, offset) });
       }
 
-      // Bin sits in the gap between the bottom of the nav section and the flame bar.
       if (sidePanelRight && bin) {
         const sidePanelRightRect = sidePanelRight.getBoundingClientRect();
         const binHeight = bin.getBoundingClientRect().height;
@@ -229,9 +204,6 @@ export default function RetroLayer() {
     return teardown;
   }, []);
 
-  // Once the natural (unscaled) size of the page is known, scale the whole stage as one
-  // unit to exactly fit the current viewport — on any screen, in any direction — so nothing
-  // ever needs its own scrollbar.
   useEffect(() => {
     if (!frozen) return;
 

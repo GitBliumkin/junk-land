@@ -5,10 +5,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Windows 98 didn't swap to a hand pointer over clickable things, so the whole layer
-     (buttons, links, drag handles included) keeps this one arrow rather than the browser's. */
   cursor: url('../assets/retro/cursors/arrow.svg') 3 3, auto;
-  background-color: var(--retro-color-teal); /* #008080 */
+  background-color: var(--retro-color-teal);
   background-image:
     repeating-linear-gradient(
       45deg,
@@ -27,9 +25,6 @@
   font-family: var(--retro-font-body);
 }
 
-/* The whole composed page — sized to its natural (unscaled) content once frozen, then
-   scaled as one unit to exactly fit the viewport, so every element (nav, badges, gifs,
-   bin) grows/shrinks together and nothing ever needs its own scrollbar. */
 .stage {
   position: relative;
   flex: none;

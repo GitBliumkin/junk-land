@@ -60,10 +60,6 @@
   padding: clamp(1.5rem, 4cqi, 4rem);
 }
 
-/* align-self: center overrides .content's default item stretch, so the
-   header shrinks to fit its own content (sized to "Technologies", its
-   widest line) and centers as a block on the page, rather than stretching
-   to the content column's full width and sitting flush left. */
 .header {
   align-self: center;
   display: flex;
@@ -79,20 +75,10 @@
   text-transform: uppercase;
   letter-spacing: 0.01em;
   line-height: 0.9;
-  /* Max raised from 7rem: it was reached well before the 8cqi value was,
-     so on a wide monitor (~2500px+) this heading rendered proportionally
-     smaller than it did on a typical 1280-1920px window — the same
-     inconsistency as experience-cards' .line and .card. 14rem keeps the
-     8cqi value uncapped through ~2800px. */
   font-size: clamp(3rem, 8cqi, 14rem);
   color: var(--modern-color-teal);
 }
 
-/* align-self: flex-start overrides .header's default item stretch — without
-   it, this box stretched to the heading's full width (header's own width,
-   since it's the widest line), so measuring its rendered edge in
-   tech-stack.tsx returned the heading's width instead of this line's own,
-   much shorter, text. */
 .subtitle {
   align-self: flex-start;
   margin: 0;
@@ -103,9 +89,6 @@
   color: var(--modern-color-ash);
 }
 
-/* Left edge lines up with the end of "Daily tools" — margin-left is
-   set inline from a measured value (see tech-stack.tsx) since the header is
-   now a centered block and its width isn't a fixed/computable CSS length. */
 .list {
   list-style: none;
   margin: 0;
@@ -146,18 +129,6 @@
   color: var(--modern-color-ash);
 }
 
-/* Pinned to the section's own bottom-left corner (the .stage box, which is
-   position: relative and spans the full section), independent of the
-   content column above. Sized off height (60% of the section) with an
-   aspect-ratio matching the source photo (6232x4056, ~1.53:1) rather than
-   an independent width — a mismatched width was previously forcing
-   object-fit: contain to letterbox the image down well short of the full
-   60% height, which read as a small, disconnected thumbnail. Matching the
-   aspect-ratio means contain has nothing to letterbox: the image fills the
-   box exactly, in full, uncropped. No max-width cap here — one would force
-   width and height to both become definite and re-introduce the same
-   letterboxing this is fixing (the mobile override below is narrow/tall
-   enough that it needs one). */
 .imageReveal {
   position: absolute;
   left: 0;
@@ -176,8 +147,6 @@
 }
 
 @media (max-width: 640px) {
-  /* No room to indent clear of the image on a narrow screen — full width
-     instead. */
   .list {
     margin-left: 0;
     max-width: 100%;

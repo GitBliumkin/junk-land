@@ -1,56 +1,29 @@
-/* Shared design tokens for the modern layer — colors and fonts only.
-   Component-specific layout/spacing lives in each component's own CSS module. */
 @import '@fontsource/bebas-neue';
 @import '@fontsource/barlow-condensed/400.css';
 @import '@fontsource/barlow-condensed/600.css';
 
 :root {
-  --modern-color-ink: #141519; /* page background, deepest layer */
-  --modern-color-charcoal: #22242b; /* panels and cards over photo backgrounds */
-  --modern-color-slate: #2b3038; /* panel borders */
-  --modern-color-bone: #f2efe8; /* primary text on dark, warm not pure white */
-  --modern-color-ash: #9b988f; /* secondary text, captions, metadata */
-  --modern-color-teal: #3d9490; /* secondary accent, tags, borders */
-  --modern-color-signal-red: #d8434e; /* rare — CTA or one highlight only */
-  --modern-color-cobalt: #4164c8; /* sampled from the shirt in the experience section's first photo */
+  --modern-color-ink: #141519;
+  --modern-color-charcoal: #22242b;
+  --modern-color-slate: #2b3038;
+  --modern-color-bone: #f2efe8;
+  --modern-color-ash: #9b988f;
+  --modern-color-teal: #3d9490;
+  --modern-color-signal-red: #d8434e;
+  --modern-color-cobalt: #4164c8;
 
   --modern-font-heading: 'Bebas Neue', sans-serif;
   --modern-font-body: 'Barlow Condensed', system-ui, -apple-system, 'Segoe UI', sans-serif;
-
-  /* Fluid type scale, sized off the hero section's own container width
-     (cqi) rather than viewport height. Width never changes during the
-     hero's scroll animation (only height does), so a width-based scale
-     can't fight the animation the way a height-based one did. The panel's
-     own height is then measured from its rendered content in JS (see
-     about-me-section.tsx), not guessed as a viewport percentage — so there's
-     nothing left to clip or leave lopsided regardless of screen size.
-     The rem clamp() bounds are just an outer safety net, not the driver. */
-  --modern-text-display: clamp(3rem, 8.5cqi, 20rem); /* name / hero headline */
-  --modern-text-heading: clamp(1.5rem, 3.4cqi, 8rem); /* section headings */
-  --modern-text-label: clamp(1rem, 1.9cqi, 4.5rem); /* eyebrow / role labels */
-  --modern-text-body: clamp(1rem, 1.3cqi, 1.6rem); /* paragraph copy — capped lower than the others so long lines of body copy stay comfortably readable even on huge screens */
+  --modern-text-display: clamp(3rem, 8.5cqi, 20rem);
+  --modern-text-heading: clamp(1.5rem, 3.4cqi, 8rem);
+  --modern-text-label: clamp(1rem, 1.9cqi, 4.5rem);
+  --modern-text-body: clamp(1rem, 1.3cqi, 1.6rem);
 }
 
-/* Sub-pixel layout rounding across this content-heavy page (many nested
-   fluid/cqi-sized elements) can leave the document's true scrollable height
-   a handful of pixels taller than the last section's own rendered box, in
-   both dev and production builds — nothing paints that sliver, so it falls
-   through to the page's default (white) background otherwise. Matching
-   body's background to ink (ContactMe's own fallback, and the color behind
-   most of the page) makes any such sliver blend in at the true end of the
-   page instead of reading as a stray white gap. Harmless on the retro route
-   too: its layer is a fixed 100vw/100vh box with its own opaque background,
-   so body never shows through there. */
 body {
   background: var(--modern-color-ink);
 }
 
-/* Native scrollbar hidden outright — ScrollProgress (see
-   scroll-progress.tsx) renders its own fixed-position indicator instead, so
-   there's no reserved-gutter native bar competing with it. Retro route never
-   scrolls the document at all (its layer is a fixed 100vw/100vh box with
-   overflow: hidden — see retro-layer.module.css), so this is harmless there
-   too. */
 html {
   scrollbar-width: none;
 }

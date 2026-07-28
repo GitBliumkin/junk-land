@@ -1,14 +1,8 @@
 import { useEffect, useRef } from 'react';
 import styles from './scroll-progress.module.css';
 
-// How long the track stays visible after the user stops scrolling/hovering/dragging.
 const FADE_DELAY_MS = 800;
 
-// Replaces the native page scrollbar (hidden globally in theme.css) with a
-// fixed bone-colored track that fills in with ink from the top down as the
-// user scrolls. It shows itself while scrolling, while hovered, or while
-// being dragged — and doubles as a real scrollbar: pressing and dragging
-// anywhere along it scrubs the page to that proportional scroll position.
 export default function ScrollProgress() {
   const trackRef = useRef<HTMLDivElement>(null);
   const fillRef = useRef<HTMLDivElement>(null);
@@ -50,9 +44,6 @@ export default function ScrollProgress() {
       scheduleHide();
     };
 
-    // Maps a pointer's vertical position directly to a scroll fraction —
-    // the same mapping updateFill uses in reverse — so pressing anywhere
-    // along the track jumps straight there, then dragging scrubs it live.
     const scrollToPointer = (clientY: number) => {
       const rect = track.getBoundingClientRect();
       const ratio = rect.height > 0 ? (clientY - rect.top) / rect.height : 0;

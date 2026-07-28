@@ -1,9 +1,3 @@
-/* Tall like TechStack's own .section: the extra height beyond .stage's 100vh
-   is what gives this section a scroll-driven hold once it finishes
-   assembling (see ContactMe.tsx's ASSEMBLE_END). Nothing sits underneath —
-   this is the last section — so the hold just means the finished layout is
-   what's on screen for the rest of the scroll to the true bottom of the
-   page, the same way it briefly is for TechStack before it hands off. */
 .section {
   position: relative;
   height: 200vh;
@@ -19,15 +13,6 @@
   overflow: hidden;
 }
 
-/* background-attachment: fixed (not a normal <img>) — the same technique,
-   same image, same background-size/position as Education's heading and
-   logo cutouts (see education.module.css). That's what makes this read as
-   one motionless photo the whole time, sitting behind Education from the
-   start and simply uncovered as its cream layer slides away, rather than a
-   second copy of the photo that scrolls up into place on its own — a plain
-   object-fit <img> here would move with the page like any other in-flow
-   element, breaking that illusion by visibly sliding in from below instead
-   of already being there. */
 .backgroundImage {
   position: absolute;
   inset: 0;
@@ -46,14 +31,6 @@
   padding: clamp(1.5rem, 4cqi, 4rem);
 }
 
-/* Rotated onto its side and run the section's full height, rather than
-   reading horizontally like the other sections' headers — writing-mode does
-   the rotation (text flows top-to-bottom, i.e. a horizontal line turned 90°
-   clockwise) instead of a transform, since a CSS transform would collide
-   with the rise-in animation's own translateY (both write to the same
-   `transform` property). Positioned absolutely (not as a flex sibling of
-   .details) so its own width never shifts .detailsWrap's true-center
-   position below. */
 .heading {
   position: absolute;
   left: clamp(1.5rem, 4cqi, 4rem);
@@ -69,18 +46,9 @@
   text-transform: uppercase;
   letter-spacing: 0.02em;
   font-size: clamp(2.5rem, 9cqi, 8rem);
-  /* Black, not the usual bone/teal — this section sits directly on the
-     photo (no dark ink panel behind it). */
   color: rgba(0, 0, 0, 0.78);
 }
 
-/* Centers .details on the stage itself (left/top 50% + its own -50%
-   translate) rather than in the flex space left over beside the heading —
-   so it sits at the true middle of the screen regardless of how wide the
-   heading column ends up. Kept separate from .details (rather than putting
-   the centering transform there directly) because .details is a
-   motion.div animating its own translateY — a static CSS `transform` on
-   that same element would be overwritten by framer-motion's inline one. */
 .detailsWrap {
   position: absolute;
   left: 50%;
@@ -101,9 +69,6 @@
   gap: clamp(1.5rem, 3cqi, 2.5rem);
 }
 
-/* The site's signal-red accent (see theme.css), same as .pageLink's hover
-   treatment elsewhere in the modern layer — opacity is the hover feedback,
-   matching that same convention, rather than shifting the color itself. */
 .iconLink {
   display: flex;
   color: var(--modern-color-signal-red);
@@ -142,9 +107,6 @@
 }
 
 @media (max-width: 640px) {
-  /* No room for a full-height vertical column beside a centered details
-     block on a narrow screen — both drop back to normal document flow,
-     stacked in a centered column like every other section's header. */
   .content {
     display: flex;
     flex-direction: column;

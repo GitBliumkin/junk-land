@@ -5,7 +5,6 @@ import styles from './retro-nav.module.css';
 export interface NavItem {
   id: string;
   label: string;
-  /** If set, renders as a direct file download instead of toggling a section panel. */
   href?: string;
 }
 

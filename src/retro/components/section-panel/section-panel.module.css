@@ -40,9 +40,6 @@
   font-size: 1.1rem;
 }
 
-/* Wraps non-framed bodies (Technologies, Education) so they center vertically
-   within the panel's available height, independent of the framed photo
-   layout which stays top-anchored. */
 .sectionBodyOuter {
   display: flex;
   align-items: center;
@@ -99,7 +96,6 @@
   margin-bottom: 8px;
 }
 
-/* Technologies badges */
 .techLogos {
   flex: 1 1 auto;
   display: flex;
@@ -116,7 +112,6 @@
   image-rendering: pixelated;
 }
 
-/* Framed photo (About Me portrait) */
 .photoFrame {
   flex: 0 0 auto;
   background: var(--retro-color-silver);
@@ -133,7 +128,6 @@
   box-sizing: border-box;
 }
 
-/* Photo frame outer width: 180 + 2*10 padding + 2*4 border = 208px */
 .photoLinks {
   width: 208px;
   display: flex;
@@ -154,8 +148,6 @@
   border: 3px outset var(--retro-color-white);
   text-align: center;
   text-decoration: none;
-  /* Native <a> UA style sets its own cursor, breaking inheritance from .retroLayer's
-     custom Windows-98 arrow — force the retro pointing-hand instead. */
   cursor: url('../../../assets/retro/cursors/hand-point.svg') 8 0, pointer;
 }
 
@@ -163,7 +155,6 @@
   border-style: inset;
 }
 
-/* Fire-glow pulse on the "↗" arrow of link buttons */
 @keyframes fireGlow {
   0%,
   100% {

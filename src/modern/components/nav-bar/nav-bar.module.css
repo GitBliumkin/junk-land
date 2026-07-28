@@ -1,6 +1,3 @@
-/* Fixed, not absolute/sticky — like ScrollProgress (see
-   scroll-progress.module.css), taken out of flow entirely so it never
-   reserves space or shifts any layout underneath it. */
 .nav {
   position: fixed;
   top: 1rem;
@@ -13,9 +10,6 @@
   column-gap: 1.75rem;
   row-gap: 0.6rem;
   max-width: min(90vw, 48rem);
-  /* Lets clicks fall through the gaps between items (and the empty space
-     around them) to whatever's underneath — only the items themselves
-     (and the dropdown) opt back in below. */
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
@@ -23,8 +17,6 @@
 .navHidden {
   opacity: 0;
   transform: translateY(-0.75rem);
-  /* Also stops the (otherwise pointer-events: auto) items/dropdown from
-     eating clicks while faded out. */
   pointer-events: none;
 }
 
@@ -49,9 +41,6 @@
   opacity: 0.5;
 }
 
-/* Shared "just text with an underline" treatment for every nav item —
-   buttons and anchors alike render identically, so Retro/Download CV
-   (real links) read as the same kind of control as the scroll-to buttons. */
 .link {
   pointer-events: auto;
   appearance: none;
@@ -62,9 +51,6 @@
   padding-bottom: 2px;
   font-family: var(--modern-font-body);
   font-weight: 600;
-  /* Scales smoothly with viewport width instead of jumping at a single
-     breakpoint — clamped so it neither shrinks below mobile-legible nor
-     grows past the size tuned for the widest layouts. */
   font-size: clamp(0.75rem, 0.65rem + 0.4vw, 0.95rem);
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -80,10 +66,6 @@
   color: var(--modern-color-ash);
 }
 
-/* Education is the one section with a light (bone) background instead of
-   the page's dark ink (see Education.module.css) — bone-colored nav text
-   would nearly disappear against it, so it flips to ink while that section
-   fills the screen behind the nav (see nav-bar.tsx's onLightSection). */
 .navOnLight .link {
   color: var(--modern-color-ink);
 }

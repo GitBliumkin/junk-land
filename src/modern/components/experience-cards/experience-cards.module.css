@@ -82,20 +82,11 @@
   text-transform: uppercase;
   letter-spacing: 0.01em;
   line-height: 0.85;
-  /* Max raised from 13rem: at very wide viewports (2500px+, e.g. a large
-     external monitor) the old cap kicked in well before the vw-scaled
-     value did, so this text — meant to read as one large hero-scale
-     poster — rendered proportionally smaller there than it did on a
-     typical 1280-1920px window. 21rem keeps the 12cqi value uncapped
-     through ~2800px. */
   font-size: clamp(2.75rem, 12cqi, 21rem);
   color: var(--modern-color-bone);
   white-space: nowrap;
 }
 
-/* First and last item pinned to the same left/right edge on every line (same
-   container width + padding), so all three lines read as bounded by shared
-   invisible margins. */
 .justified {
   justify-content: space-between;
 }
@@ -110,30 +101,14 @@
 
 .imageInset {
   flex: 0 0 auto;
-  /* Height comes from the line's own font-size (em), so the inset always
-     matches the letters' cap height instead of scaling independently. */
   height: 0.78em;
   aspect-ratio: 3 / 2;
   object-fit: cover;
 }
 
-/* Fixed (not content-driven) width and height — every card renders at the
-   same size regardless of bullet count, sized generously enough for the
-   longest entry (Personify, 6 bullets); cardBody centers its own content
-   vertically and, if content still overflowed on some smaller viewport, the
-   overflow-y: auto fallback on cardBody keeps it scrollable instead of
-   breaking the fixed box. */
 .card {
   position: relative;
   flex: 0 0 auto;
-  /* 72vw (was 88vw) — 88 left barely any visible margin around the card,
-     reading as edge-to-edge; 72 leaves clear whitespace on both sides so
-     the card reads as a focused card rather than a full-bleed panel. The
-     rem cap is a pure sanity ceiling for very wide monitors, not a
-     width-fighting constraint — see the width-consistency fix history:
-     any cap the viewport can outgrow reintroduces the "two cards visible
-     at once" bug, so this is set far past any realistic single-monitor
-     width (including 5120px ultrawide/5K). */
   width: min(72vw, 300rem);
   height: clamp(38rem, 82vh, 56rem);
   border-radius: 1.75rem;
@@ -143,17 +118,11 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
-/* Wraps just the photo + shade (not .cardBody) so the exit fade in
-   experience-cards.tsx can fade this backdrop out on its own, landing
-   TechStack's already-stuck content (see TechStack.tsx) between it and the
-   card's own text, which stays fully opaque throughout. */
 .cardBackdrop {
   position: absolute;
   inset: 0;
 }
 
-/* The photo now fills the entire card as its background, not just a strip
-   at the top — cardBody sits on top of it in normal flow. */
 .cardImage {
   position: absolute;
   inset: 0;
@@ -162,31 +131,17 @@
   object-fit: cover;
 }
 
-/* Cards 1 and 3 are visibly sharper than card 2's motion-blur shot — this
-   blurs them to match so all three read as one consistent, hazy set. */
 .cardImageBlurred {
   filter: blur(6px) saturate(1.05);
-  /* Scaled past the blur radius so the softened edge pixels fall outside
-     the visible crop instead of haloing against the card's rounded border. */
   transform: scale(1.1);
 }
 
-/* Covers the full card (not just the bottom) so header/tech-stack text stays
-   legible too, not only the bullets — darkest at the bottom where the
-   bullet list and product link live. */
 .cardShade {
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, rgba(20, 21, 25, 0.5) 0%, rgba(20, 21, 25, 0.65) 35%, rgba(20, 21, 25, 0.9) 100%);
 }
 
-/* justify-content: space-between pins the header to the top and the product
-   link to the bottom, spreading the sections between them (tech stack,
-   overview, bullets) across the rest of the fixed-height card — so shorter
-   entries fill the card edge-to-edge instead of clumping as one centered
-   block with big dead margins above and below. The shared `gap` sets the
-   spacing floor between sections; space-between only adds to it when a
-   card's content is shorter than the available height. */
 .cardBody {
   position: relative;
   height: 100%;
@@ -213,13 +168,6 @@
   min-width: 0;
 }
 
-/* Height-fixed, width-auto rather than a fixed square: the source logos
-   have very different aspect ratios (icon+wordmark lockups, not square
-   marks), so a square box with object-fit: contain would crush them down to
-   an illegible sliver. The source files are also pre-trimmed to their tight
-   content bounding box (see src/assets/modern/images/*-trimmed.png), so a
-   shared height here maps to a genuinely consistent lettering scale instead
-   of being thrown off by inconsistent baked-in padding. */
 .cardLogo {
   flex: 0 0 auto;
   height: 3.25rem;
@@ -318,11 +266,6 @@
   color: var(--modern-color-ash);
 }
 
-/* Matches the role/title color (--modern-color-bone), not the teal used
-   elsewhere in this section. Narrow vertical rectangle (not a square) so the
-   marker reads as a tick mark; height ties to the bullet's own (now
-   vw-scaled) font-size so it grows in step with the text instead of staying
-   pinned to a fixed pixel size on large screens. */
 .cardBulletList li::before {
   content: '';
   position: absolute;
@@ -334,9 +277,6 @@
   background: var(--modern-color-bone);
 }
 
-/* Inline data/tech emphasis within bullets — stays signal-red, kept
-   deliberately distinct from the ember used for the product-page link below
-   so the two accents never get confused for the same kind of highlight. */
 .cardBulletList strong {
   font-family: var(--modern-font-heading);
   font-weight: 400;

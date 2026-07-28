@@ -19,8 +19,6 @@ function highlight(text: string, styles: Record<string, string>) {
 
 interface SectionPanelProps {
   section: SectionItem;
-  /** Owned by NavSection (not local state) so it can stay in sync with the
-   *  URL hash — see nav-section.tsx. */
   pageIndex: number;
   onPageChange: (index: number) => void;
 }
@@ -218,8 +216,6 @@ export default function SectionPanel({ section, pageIndex, onPageChange }: Secti
               </div>
             );
 
-            // Non-framed bodies (Technologies, Education) center vertically within
-            // the panel's available height; the framed photo layout stays top-anchored.
             return !framed ? <div className={styles.sectionBodyOuter}>{body}</div> : body;
           })()
         )}

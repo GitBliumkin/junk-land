@@ -45,17 +45,9 @@ export default function ContactMe() {
   });
 
   const assembleProgress = useTransform(scrollYProgress, (p) => Math.min(1, p / ASSEMBLE_END));
-
-  // Header rises into place over the first slice of the assemble range,
-  // starting well below its resting spot so it reads as rising up from the
-  // bottom of the screen rather than simply fading in where it sits.
   const headerProgress = (p: number) => Math.min(1, Math.max(0, p / 0.4));
   const headerOpacity = useTransform(assembleProgress, headerProgress);
   const headerY = useTransform(assembleProgress, (p) => 72 * (1 - headerProgress(p)));
-
-  // Icons + contact details settle in over a window that starts after the
-  // header's already under way, so the two don't compete for attention in
-  // the same instant.
   const detailsProgress = (p: number) => Math.min(1, Math.max(0, (p - 0.3) / 0.6));
   const detailsOpacity = useTransform(assembleProgress, detailsProgress);
   const detailsY = useTransform(assembleProgress, (p) => 20 * (1 - detailsProgress(p)));

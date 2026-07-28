@@ -61,8 +61,6 @@ export default function NavSection() {
   const [selection, setSelection] = useState<Selection>(selectionFromCurrentHash);
   const openSection = SECTION_ITEMS.find((s) => s.id === selection.sectionId) ?? null;
 
-  // Browser back/forward changes the hash without a click — follow it so the
-  // panel/page shown always matches the address bar.
   useEffect(() => {
     const handlePopState = () => setSelection(selectionFromCurrentHash());
     window.addEventListener('popstate', handlePopState);
