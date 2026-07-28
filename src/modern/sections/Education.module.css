@@ -1,0 +1,129 @@
+/* Sits underneath TechStack's sticky stage the whole time (see
+   TechStack.module.css's .section/.stage) — no scroll-driven entrance of
+   its own, since it's already revealed the instant TechStack's pin
+   releases and slides away, not something that animates in on its own
+   timeline. Bone background (not ink) — this section deliberately breaks
+   from the rest of the page's dark theme to read as a distinct closing
+   note. min-height: 100vh (not just enough for its own content) so that
+   once scrolled all the way down, this section alone fills the screen —
+   otherwise, being shorter than the viewport, it'd leave TechStack's
+   sticky stage (still exiting above it) peeking in at the top. */
+.section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  container-type: inline-size;
+  container-name: eduStage;
+  background: var(--modern-color-bone);
+  padding: clamp(1.5rem, 4cqi, 3rem);
+  /* The heading's font reserves far more descender space below its capital
+     letters than this all-caps text ever uses, so with equal padding the
+     gap under "EDUCATION" reads visibly larger than the gap above it.
+     Pulling padding-bottom in by ~10% of the heading's own font-size (its
+     measured dead descender space) makes the two read as the same size. */
+  padding-bottom: calc(clamp(1.5rem, 4cqi, 3rem) - 0.1 * clamp(2.5rem, 24cqi, 26rem));
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 4cqi, 4rem);
+  width: 100%;
+}
+
+/* Sized to span almost the section's full width — the section's own name
+   reads as a huge label filling the left side, with the details block
+   centered in whatever space is left beside it, rather than a small
+   caption above the details like the other sections' headers. */
+.heading {
+  flex: 0 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--modern-font-heading);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 0.85;
+  font-size: clamp(2.5rem, 24cqi, 26rem);
+  color: var(--modern-color-ink);
+  white-space: nowrap;
+  /* At this font-size, Bebas Neue's descender metric (reserved for glyphs
+     this all-caps text never uses) counts toward the *document's*
+     scrollable area even though nothing is ever painted there — up to
+     ~90px of invisible extra scroll room appears below this, the page's
+     last section, on wide screens. overflow: hidden clips that phantom
+     region from the layout without touching the visible glyphs or box. */
+  overflow: hidden;
+}
+
+/* flex: 1 makes this claim all width left over after the heading, then
+   centers within it — so the lockup sits in the middle of the white space
+   beside the header instead of hugging the section's right edge. */
+.details {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+/* Source lockup (crest + wordmark) is already transparent-background — sits
+   directly on this section's bone background with no card behind it. */
+.logo {
+  height: clamp(2.5rem, 6cqi, 4rem);
+  width: auto;
+  max-width: 16rem;
+  object-fit: contain;
+}
+
+.school {
+  margin: 0;
+  font-family: var(--modern-font-heading);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 0.95;
+  font-size: clamp(1.5rem, 3.6cqi, 2.75rem);
+  color: var(--modern-color-ink);
+}
+
+.program {
+  margin: 0;
+  font-family: var(--modern-font-body);
+  font-size: clamp(1rem, 1.6cqi, 1.3rem);
+  color: var(--modern-color-ash);
+}
+
+.date {
+  font-family: var(--modern-font-body);
+  font-size: clamp(0.85rem, 1.2cqi, 1rem);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--modern-color-ash);
+}
+
+@media (max-width: 640px) {
+  .section {
+    /* Stacked layout puts .details, not the heading, against the bottom
+       edge here, so the descender-space compensation above doesn't apply —
+       back to equal padding on all sides. */
+    padding-bottom: clamp(1.5rem, 4cqi, 3rem);
+  }
+
+  .content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .heading {
+    font-size: clamp(2.5rem, 20cqi, 6rem);
+  }
+
+  .details {
+    flex: 0 0 auto;
+  }
+}

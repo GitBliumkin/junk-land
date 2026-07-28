@@ -33,3 +33,16 @@
   --modern-text-label: clamp(1rem, 1.9cqi, 4.5rem); /* eyebrow / role labels */
   --modern-text-body: clamp(1rem, 1.3cqi, 1.6rem); /* paragraph copy — capped lower than the others so long lines of body copy stay comfortably readable even on huge screens */
 }
+
+/* Sub-pixel layout rounding across this content-heavy page (many nested
+   fluid/cqi-sized elements) leaves the document's true scrollable height a
+   handful of pixels taller than the last section's own rendered box, in
+   both dev and production builds — nothing paints that sliver, so it falls
+   through to the page's default (white) background. Matching body's
+   background to Education's bone tone, the last section on the page,
+   makes that sliver blend in instead of reading as a stray white gap.
+   Harmless on the retro route too: its layer is a fixed 100vw/100vh box
+   with its own opaque background, so body never shows through there. */
+body {
+  background: var(--modern-color-bone);
+}

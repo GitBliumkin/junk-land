@@ -1,5 +1,12 @@
+/* Tall like ExperienceCards' own .container: the extra height beyond
+   .stage's 100vh is what gives this section a scroll-driven hold after it
+   finishes assembling (see TechStack.tsx's ASSEMBLE_END), so it sits fully
+   revealed for a while before releasing — same sticky-pin-then-release
+   mechanic ExperienceCards uses to hand off to this section in the first
+   place, just applied again to hand off to Education underneath it. */
 .section {
   position: relative;
+  height: 220vh;
   background: var(--modern-color-ink);
 }
 
@@ -9,7 +16,8 @@
    section's actual rendered width instead of drifting at odd viewport
    widths. */
 .stage {
-  position: relative;
+  position: sticky;
+  top: 0;
   container-type: inline-size;
   container-name: techStage;
   height: 100vh;

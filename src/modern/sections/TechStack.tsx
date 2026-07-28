@@ -14,12 +14,23 @@ const TECH_STACK = [
   { category: 'AI Tooling', items: 'GitHub Copilot, Claude' },
 ];
 
-// Each row's reveal window overlaps the next by 0.2 of the shared scroll
+// Each row's reveal window overlaps the next by 0.2 of the shared assemble
 // range, so rows 1-8 are evenly distributed but don't feel like a rigid
 // one-at-a-time slideshow — the last row's window ends exactly at 1 so it
-// reaches full opacity right as the section finishes its scroll passage.
+// reaches full opacity right as the assemble range (and its subsequent
+// hold) begins.
 const ROW_WINDOW = 0.3;
 const ROW_STEP = (1 - ROW_WINDOW) / (TECH_STACK.length - 1);
+
+// This section is pinned (see .stage's position: sticky) for its own scroll
+// range, the same way ExperienceCards pins its stage — [0, ASSEMBLE_END] of
+// that pinned range is spent assembling (header rise, row reveal, image
+// clip-path), then it holds fully assembled for the rest of the range.
+// Reaching the end of the range (scrollYProgress hitting 1) is what
+// releases the pin and lets the section slide away as a block, revealing
+// Education underneath — same handoff ExperienceCards uses to reveal this
+// section in the first place.
+const ASSEMBLE_END = 0.35;
 
 // Matches the @media (max-width: 640px) breakpoint in TechStack.module.css
 // — below it the list drops the indent entirely (see the CSS), so there's
@@ -104,33 +115,38 @@ export default function TechStack() {
   // the user scrolls through it instead of firing as separate,
   // independently-triggered effects.
   //
-  // Offset ends at 'end end' (section bottom meets viewport bottom), not
-  // 'end start' — this section is the last thing on the page, so the
-  // document can never scroll far enough for its bottom to reach the
-  // viewport's top. 'end end' completes exactly when the section finishes
-  // entering the viewport, which is also the natural end of the page.
+  // 'start start'/'end end' (not 'start end'/'end end'): this section is now
+  // pinned via .stage's position: sticky, so progress should track the
+  // pinned scroll range itself (0 at the moment .section's top reaches the
+  // viewport top and the pin engages, 1 at the moment .section's bottom
+  // reaches the viewport bottom and the pin releases) — the same offset
+  // ExperienceCards uses for its own pinned stage.
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ['start end', 'end end'],
+    offset: ['start start', 'end end'],
   });
+
+  // Assembling (header, rows, image) happens over [0, ASSEMBLE_END] of the
+  // pinned range; this remaps that sub-range to a full 0-1 so the existing
+  // per-element timings below don't need to know about the hold that
+  // follows — they just clamp at their fully-assembled state once raw
+  // progress passes ASSEMBLE_END, for the rest of the pin.
+  const assembleProgress = useTransform(scrollYProgress, (p) => Math.min(1, p / ASSEMBLE_END));
 
   // Grows from a hidden sliver tucked into the image box's own bottom-left
   // corner out to the box's full bounds — the box itself is already
   // positioned and sized (60% of the section's height, bottom-left of the
   // stage; see .imageReveal), so this only animates how much of it shows.
-  const clipPath = useTransform(scrollYProgress, [0, 1], ['inset(100% 100% 0% 0%)', 'inset(0% 0% 0% 0%)']);
+  const clipPath = useTransform(assembleProgress, [0, 1], ['inset(100% 100% 0% 0%)', 'inset(0% 0% 0% 0%)']);
 
-  // Header rises into place over the first 0.2 of the section's own scroll
-  // range — that range starts right as this section's top clears the
-  // viewport bottom (see the 'start end' offset above), which is the exact
-  // moment the sticky ExperienceCards stage releases with its last card
-  // filling the screen. Starting the heading well below its resting spot
-  // (48px, more than a row's 16px) and animating it up from there reads as
-  // the text rising out from underneath that last card rather than simply
-  // being present when the section arrives.
+  // Header rises into place over the first 0.2 of the assemble range.
+  // Starting the heading well below its resting spot (48px, more than a
+  // row's 16px) and animating it up from there reads as the text rising
+  // into place as the section pins, rather than simply being present when
+  // the section arrives.
   const headerProgress = (p: number) => Math.min(1, Math.max(0, p / 0.2));
-  const headerOpacity = useTransform(scrollYProgress, headerProgress);
-  const headerY = useTransform(scrollYProgress, (p) => 48 * (1 - headerProgress(p)));
+  const headerOpacity = useTransform(assembleProgress, headerProgress);
+  const headerY = useTransform(assembleProgress, (p) => 48 * (1 - headerProgress(p)));
 
   return (
     <section ref={sectionRef} className={styles.section}>
@@ -152,7 +168,7 @@ export default function TechStack() {
                   key={category}
                   category={category}
                   items={items}
-                  progress={scrollYProgress}
+                  progress={assembleProgress}
                   range={[start, end]}
                 />
               );
