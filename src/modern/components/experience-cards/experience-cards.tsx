@@ -79,6 +79,28 @@ export default function ExperienceCards() {
     offset: ['start start', 'end end'],
   });
 
+  // A second, separate scroll source for the exit itself: 'end end' (the
+  // container's bottom reaches the viewport bottom — the instant the pin
+  // above releases) to 'end start' (that same bottom reaches the viewport
+  // top — fully scrolled past) brackets exactly the container's own
+  // slide-away, independent of scrollYProgress above, which is already
+  // pinned at 1 by then and doesn't track this part of the scroll.
+  const { scrollYProgress: exitProgress } = useScroll({
+    target: containerRef,
+    offset: ['end end', 'end start'],
+  });
+
+  // Fades out early in the exit slide (not across the whole thing): the
+  // card's own backdrop (photo + shade, not .cardBody — see .cardBackdrop
+  // below) *and* .stageFill, the ink that otherwise fills the rest of the
+  // stage around and below the card. Both share this one value so they
+  // dissolve in lockstep — fading only the card would leave that
+  // surrounding ink solid, cutting TechStack's already-stuck rows (see
+  // TechStack.tsx/.module.css) in and out instead of revealing them
+  // continuously. The card's own text (.cardBody) stays at full opacity
+  // throughout, landing visually between the dissolving backdrop and it.
+  const cardExitOpacity = useTransform(exitProgress, [0, 0.6], [1, 0]);
+
   // Poster lines assemble first — top/bottom in from the right, middle from
   // the left — then hold in place, then the whole poster slides away as a
   // single unit along with the rest of the row as the cards take its place.
@@ -110,6 +132,7 @@ export default function ExperienceCards() {
   return (
     <section ref={containerRef} className={styles.container}>
       <div ref={stageRef} className={styles.stage}>
+        <motion.div className={styles.stageFill} style={{ opacity: cardExitOpacity }} />
         <motion.div ref={rowRef} className={styles.row} style={{ x }}>
           <div className={styles.poster}>
             <motion.div className={`${styles.line} ${styles.justified}`} style={{ x: fromRightX }}>
@@ -136,13 +159,15 @@ export default function ExperienceCards() {
               className={styles.card}
               key={image}
             >
-              <LazyImage
-                src={image}
-                alt=""
-                className={`${styles.cardImage} ${blurred ? styles.cardImageBlurred : ''}`}
-                draggable={false}
-              />
-              <div className={styles.cardShade} />
+              <motion.div className={styles.cardBackdrop} style={{ opacity: cardExitOpacity }}>
+                <LazyImage
+                  src={image}
+                  alt=""
+                  className={`${styles.cardImage} ${blurred ? styles.cardImageBlurred : ''}`}
+                  draggable={false}
+                />
+                <div className={styles.cardShade} />
+              </motion.div>
               <div className={styles.cardBody}>
                 <div className={styles.cardHeader}>
                   <div className={styles.cardIdentity}>

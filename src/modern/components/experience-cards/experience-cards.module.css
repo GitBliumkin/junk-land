@@ -1,16 +1,39 @@
+/* z-index: 2 (TechStack's .section sits at 1) — TechStack now overlaps the
+   last 100vh of this container (see its own margin-top) so its
+   already-stuck content sits ready underneath, and this needs to keep
+   painting on top through that overlap for the last card's exit to read as
+   sliding away to reveal it, rather than the two visibly fighting over
+   which one's on top. */
 .container {
   position: relative;
+  z-index: 2;
   height: 360vh;
-  background: var(--modern-color-ink);
 }
 
 .stage {
   position: sticky;
   top: 0;
+  z-index: 0;
   height: 100vh;
   overflow: hidden;
   display: flex;
   align-items: center;
+}
+
+/* The ink fill used to live directly on .stage/.container, which meant it
+   stayed fully opaque everywhere except the card's own silhouette — leaving
+   a solid dead band (the margin around and below the card) that didn't fade
+   with it, so TechStack's rows cut in and out instead of reading
+   continuously. Pulling it into its own layer here, faded by the same
+   exit-driven opacity as the card's backdrop (see experience-cards.tsx),
+   means the *entire* stage dissolves together, not just the photo inside
+   the card. z-index: -1 (relative to .stage's own stacking context, set up
+   by its z-index: 0 above) puts it behind .row without needing .row itself
+   to be positioned. */
+.stageFill {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: var(--modern-color-ink);
 }
 
@@ -119,6 +142,15 @@
   border: 1px solid var(--modern-color-slate);
   background: var(--modern-color-charcoal);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* Wraps just the photo + shade (not .cardBody) so the exit fade in
+   experience-cards.tsx can fade this backdrop out on its own, landing
+   TechStack's already-stuck content (see TechStack.tsx) between it and the
+   card's own text, which stays fully opaque throughout. */
+.cardBackdrop {
+  position: absolute;
+  inset: 0;
 }
 
 /* The photo now fills the entire card as its background, not just a strip

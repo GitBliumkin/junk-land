@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react';
-import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import styles from './TechStack.module.css';
 import techImage from '../../assets/modern/images/technologies.jpg';
 
@@ -14,57 +14,27 @@ const TECH_STACK = [
   { category: 'AI Tooling', items: 'GitHub Copilot, Claude' },
 ];
 
-// Each row's reveal window overlaps the next by 0.2 of the shared assemble
-// range, so rows 1-8 are evenly distributed but don't feel like a rigid
-// one-at-a-time slideshow — the last row's window ends exactly at 1 so it
-// reaches full opacity right as the assemble range (and its subsequent
-// hold) begins.
-const ROW_WINDOW = 0.3;
-const ROW_STEP = (1 - ROW_WINDOW) / (TECH_STACK.length - 1);
-
 // This section is pinned (see .stage's position: sticky) for its own scroll
 // range, the same way ExperienceCards pins its stage — [0, ASSEMBLE_END] of
-// that pinned range is spent assembling (header rise, row reveal, image
-// clip-path), then it holds fully assembled for the rest of the range.
-// Reaching the end of the range (scrollYProgress hitting 1) is what
-// releases the pin and lets the section slide away as a block, revealing
-// Education underneath — same handoff ExperienceCards uses to reveal this
-// section in the first place.
+// that pinned range is spent growing the corner image in, then it holds
+// fully assembled for the rest of the range. Reaching the end of the range
+// (scrollYProgress hitting 1) is what releases the pin and lets the section
+// slide away as a block, revealing Education underneath — same handoff
+// ExperienceCards uses to reveal this section in the first place.
+//
+// The header and row list aren't part of that assemble sequence — unlike
+// the old version of this component, they're not animated in at all.
+// They're fully visible from the moment this section exists in the DOM, so
+// that as ExperienceCards' own pinned stage slides away above it, this
+// section's text reads as having been sitting there underneath the whole
+// time and simply uncovered, rather than as new content animating in on
+// its own timeline after the handoff.
 const ASSEMBLE_END = 0.35;
 
 // Matches the @media (max-width: 640px) breakpoint in TechStack.module.css
 // — below it the list drops the indent entirely (see the CSS), so there's
 // no point measuring/applying one here either.
 const INDENT_MIN_CONTAINER_WIDTH = 640;
-
-interface TechRowProps {
-  category: string;
-  items: string;
-  progress: MotionValue<number>;
-  range: [number, number];
-}
-
-function TechRow({ category, items, progress, range }: TechRowProps) {
-  const [start, end] = range;
-  // Framer Motion's array-form useTransform(value, [start, end], [0, 1])
-  // hands off to a native, hardware-accelerated scroll animation whenever
-  // the source is a scroll-linked MotionValue — but that fast path only
-  // handles ranges spanning the source's full 0-1 span correctly. With 8
-  // rows each owning a narrow sub-range, it was producing values that rose
-  // to 1 and then fell back to 0 past each row's own window, instead of
-  // holding at 1. Passing a plain function instead of a range array opts
-  // out of that fast path and computes the clamp manually.
-  const progressInWindow = (p: number) => Math.min(1, Math.max(0, (p - start) / (end - start)));
-  const opacity = useTransform(progress, progressInWindow);
-  const y = useTransform(progress, (p) => 16 * (1 - progressInWindow(p)));
-
-  return (
-    <motion.li className={styles.row} style={{ opacity, y }}>
-      <span className={styles.rowCategory}>{category}</span>
-      <span className={styles.rowItems}>{items}</span>
-    </motion.li>
-  );
-}
 
 export default function TechStack() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -110,11 +80,6 @@ export default function TechStack() {
     return () => observer.disconnect();
   }, []);
 
-  // A single scroll source drives everything in this section — each row's
-  // reveal and the corner image's clip-path — so they progress together as
-  // the user scrolls through it instead of firing as separate,
-  // independently-triggered effects.
-  //
   // 'start start'/'end end' (not 'start end'/'end end'): this section is now
   // pinned via .stage's position: sticky, so progress should track the
   // pinned scroll range itself (0 at the moment .section's top reaches the
@@ -126,59 +91,59 @@ export default function TechStack() {
     offset: ['start start', 'end end'],
   });
 
-  // Assembling (header, rows, image) happens over [0, ASSEMBLE_END] of the
-  // pinned range; this remaps that sub-range to a full 0-1 so the existing
-  // per-element timings below don't need to know about the hold that
-  // follows — they just clamp at their fully-assembled state once raw
+  // Assembling (just the image now — see the note by ASSEMBLE_END above)
+  // happens over [0, ASSEMBLE_END] of the pinned range; this remaps that
+  // sub-range to a full 0-1 so it clamps at fully-assembled once raw
   // progress passes ASSEMBLE_END, for the rest of the pin.
   const assembleProgress = useTransform(scrollYProgress, (p) => Math.min(1, p / ASSEMBLE_END));
 
-  // Grows from a hidden sliver tucked into the image box's own bottom-left
-  // corner out to the box's full bounds — the box itself is already
-  // positioned and sized (60% of the section's height, bottom-left of the
-  // stage; see .imageReveal), so this only animates how much of it shows.
-  const clipPath = useTransform(assembleProgress, [0, 1], ['inset(100% 100% 0% 0%)', 'inset(0% 0% 0% 0%)']);
-
-  // Header rises into place over the first 0.2 of the assemble range.
-  // Starting the heading well below its resting spot (48px, more than a
-  // row's 16px) and animating it up from there reads as the text rising
-  // into place as the section pins, rather than simply being present when
-  // the section arrives.
-  const headerProgress = (p: number) => Math.min(1, Math.max(0, p / 0.2));
-  const headerOpacity = useTransform(assembleProgress, headerProgress);
-  const headerY = useTransform(assembleProgress, (p) => 48 * (1 - headerProgress(p)));
+  // The box itself is already positioned and sized (60% of the section's
+  // height, bottom-left of the stage, flush with the stage's own left and
+  // bottom edges; see .imageReveal) and stays put the whole time — what
+  // animates is the image sliding across it and rotating upright, out of
+  // the stage's bottom-left corner. Sliding a full box-width left and a
+  // full box-height down (translate(-100%, 100%)) lines the image up
+  // exactly with that corner, since the box itself already starts at
+  // left: 0 / bottom: 0 — so at progress 0 the image sits just outside the
+  // stage entirely, tucked against its bottom-left corner, rather than
+  // hidden somewhere arbitrary off-screen. transformOrigin: 'bottom left'
+  // pivots the rotation on that same corner, so the image reads as
+  // swinging up out of the corner into place rather than spinning in
+  // place while it also happens to be translating.
+  const slideX = useTransform(assembleProgress, [0, 1], ['-100%', '0%']);
+  const slideY = useTransform(assembleProgress, [0, 1], ['100%', '0%']);
+  const rotate = useTransform(assembleProgress, [0, 1], [45, 0]);
 
   return (
     <section ref={sectionRef} className={styles.section}>
       <div className={styles.stage}>
         <div ref={contentRef} className={styles.content}>
-          <motion.header className={styles.header} style={{ opacity: headerOpacity, y: headerY }}>
+          <header className={styles.header}>
             <h2 className={styles.heading}>Technologies</h2>
             <p ref={subtitleRef} className={styles.subtitle}>
               Daily tools
             </p>
-          </motion.header>
+          </header>
 
           <ul className={styles.list} style={{ marginLeft: listIndent || undefined }}>
-            {TECH_STACK.map(({ category, items }, index) => {
-              const start = index * ROW_STEP;
-              const end = start + ROW_WINDOW;
-              return (
-                <TechRow
-                  key={category}
-                  category={category}
-                  items={items}
-                  progress={assembleProgress}
-                  range={[start, end]}
-                />
-              );
-            })}
+            {TECH_STACK.map(({ category, items }) => (
+              <li key={category} className={styles.row}>
+                <span className={styles.rowCategory}>{category}</span>
+                <span className={styles.rowItems}>{items}</span>
+              </li>
+            ))}
           </ul>
         </div>
 
-        <motion.div className={styles.imageReveal} style={{ clipPath }}>
-          <img src={techImage} alt="" className={styles.imageRevealImg} draggable={false} />
-        </motion.div>
+        <div className={styles.imageReveal}>
+          <motion.img
+            src={techImage}
+            alt=""
+            className={styles.imageRevealImg}
+            draggable={false}
+            style={{ x: slideX, y: slideY, rotate, transformOrigin: 'bottom left' }}
+          />
+        </div>
       </div>
     </section>
   );

@@ -3,9 +3,22 @@
    finishes assembling (see TechStack.tsx's ASSEMBLE_END), so it sits fully
    revealed for a while before releasing — same sticky-pin-then-release
    mechanic ExperienceCards uses to hand off to this section in the first
-   place, just applied again to hand off to Education underneath it. */
+   place, just applied again to hand off to Education underneath it.
+
+   margin-top: -100vh pulls this section's start back to coincide with the
+   exact moment ExperienceCards' own pin releases — since .stage is this
+   section's first child, that's also the earliest point its sticky
+   containing block begins, so .stage sticks (and its header/list are
+   already fully assembled, sitting at rest — see TechStack.tsx) from that
+   instant, not only once ExperienceCards' last card has fully scrolled
+   past. z-index: 1 (ExperienceCards' .container sits at 2) keeps that last
+   card painting on top for the overlapping 100vh, so this section's
+   already-stuck content reads as living underneath it, uncovered as the
+   card slides away, rather than the two scrolling past each other. */
 .section {
   position: relative;
+  z-index: 1;
+  margin-top: -100vh;
   height: 220vh;
   background: var(--modern-color-ink);
 }
