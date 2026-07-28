@@ -5,7 +5,7 @@
 // off experience-cards.tsx) because that file must only export the one
 // component for React Fast Refresh to work.
 
-import { EXPERIENCE } from '../../../data/experience';
+import { EXPERIENCE } from '../../data/experience';
 
 // experience-cards.tsx renders exactly one card per EXPERIENCE entry (see
 // its CARDS array), so this stays in sync with the card count without a

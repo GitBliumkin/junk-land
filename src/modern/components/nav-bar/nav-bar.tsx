@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import styles from './nav-bar.module.css';
 import { getExperienceCardScrollProgress } from '../experience-cards/experience-scroll';
 import { setUrlHash } from '../../../shared/url-hash';
+import { RESUME_PATH } from '../../../shared/resume';
 
 // Order matches CARDS in experience-cards.tsx (== EXPERIENCE[0..2]), so index
 // here lines up directly with the index passed to getExperienceCardScrollProgress.
@@ -16,7 +17,7 @@ const EXPERIENCE_DROPDOWN_ITEMS = [
 
 const SECTION_LINKS = [
   // Technologies' own element starts 100vh before it visually reads as
-  // "revealed" — see TechStack.module.css's margin-top: -100vh, which pulls
+  // "revealed" — see tech-stack.module.css's margin-top: -100vh, which pulls
   // its box back to where ExperienceCards' pin releases so its sticky stage
   // is already stuck (and ready) underneath the last experience card while
   // that card is still fading out on top of it (see experience-cards.tsx's
@@ -28,8 +29,9 @@ const SECTION_LINKS = [
 ];
 
 // About Me and Contact Me's hashes double as their section's real DOM id
-// (see about-me-section.tsx / ContactMe.tsx); Experience's cards don't have
-// one each, hence EXPERIENCE_DROPDOWN_ITEMS carrying its own made-up hashes.
+// (see sections/about-me/about-me.tsx / sections/contact-me/contact-me.tsx);
+// Experience's cards don't have one each, hence EXPERIENCE_DROPDOWN_ITEMS
+// carrying its own made-up hashes.
 const ABOUT_ME_HASH = 'about-me';
 const CONTACT_ME_HASH = 'contact-me';
 
@@ -40,7 +42,7 @@ function scrollToId(id: string, extraViewportHeights = 0, instant = false) {
   window.scrollTo({ top: targetY, behavior: instant ? 'auto' : 'smooth' });
 }
 
-// About Me is pinned (see about-me-section.tsx) for its own scroll range —
+// About Me is pinned (see sections/about-me/about-me.tsx) for its own scroll range —
 // jumping to its bare element top lands at the very start of that range,
 // before the panel has expanded to full-screen or the bio text has revealed
 // (i.e. the collapsed masthead-only look). EXPAND_END there is 0.6 (panel
@@ -65,7 +67,7 @@ function scrollToAboutMeOpened(instant = false) {
 }
 
 // Contact Me is the last section on the page and holds its fully-assembled
-// layout for the remainder of the document's scroll (see ContactMe.tsx) —
+// layout for the remainder of the document's scroll (see sections/contact-me/contact-me.tsx) —
 // so "the end" of that section really means the true bottom of the page,
 // not just its element's top edge.
 function scrollToBottom(instant = false) {
@@ -155,7 +157,7 @@ export default function NavBar() {
   useEffect(() => {
     let idleTimer: ReturnType<typeof setTimeout>;
     // Education is the one section with a light (--modern-color-bone)
-    // background instead of the page's dark ink (see Education.module.css);
+    // background instead of the page's dark ink (see sections/education/education.module.css);
     // its .stage is sticky-pinned full-screen for the section's whole scroll
     // range, so the nav sits over that light background for as long as the
     // section's element spans the very top of the viewport.
@@ -318,9 +320,7 @@ export default function NavBar() {
         <Link to="/retro" className={styles.link}>
           Retro
         </Link>
-        {/* Placeholder path — drop the real file at public/resume.pdf once sourced
-            (same convention as the retro nav's Download CV button). */}
-        <a href="/resume.pdf" download className={styles.link}>
+        <a href={RESUME_PATH} download className={styles.link}>
           Download CV
         </a>
       </div>

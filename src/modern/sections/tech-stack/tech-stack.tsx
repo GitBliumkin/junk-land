@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import styles from './TechStack.module.css';
-import techImage from '../../assets/modern/images/technologies.jpg';
+import styles from './tech-stack.module.css';
+import techImage from '../../../assets/modern/images/technologies.jpg';
 
 const TECH_STACK = [
   { category: 'Languages', items: 'Java, TypeScript, JavaScript, Scala' },
@@ -31,7 +31,7 @@ const TECH_STACK = [
 // its own timeline after the handoff.
 const ASSEMBLE_END = 0.35;
 
-// Matches the @media (max-width: 640px) breakpoint in TechStack.module.css
+// Matches the @media (max-width: 640px) breakpoint in tech-stack.module.css
 // — below it the list drops the indent entirely (see the CSS), so there's
 // no point measuring/applying one here either.
 const INDENT_MIN_CONTAINER_WIDTH = 640;
@@ -45,7 +45,7 @@ export default function TechStack() {
   // the header is centered as a block, so that position moves whenever the
   // header's own width (font size, viewport width) changes. Measuring it
   // directly (rather than guessing a value in CSS) is what keeps the two
-  // in sync; same ResizeObserver-on-a-ref pattern about-me-section.tsx uses for
+  // in sync; same ResizeObserver-on-a-ref pattern about-me.tsx uses for
   // its own measured layout.
   const [listIndent, setListIndent] = useState(0);
 

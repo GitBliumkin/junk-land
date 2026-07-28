@@ -1,6 +1,6 @@
 /* Tall like TechStack's own .section: the extra height beyond .stage's
    100vh is what gives this section a scroll-driven hold once the panel
-   finishes expanding to full-screen (see about-me-section.tsx's EXPAND_END),
+   finishes expanding to full-screen (see about-me.tsx's EXPAND_END),
    so it actually reads as full-screen for a while before releasing the pin
    and handing off to ExperienceCards. */
 .hero {
@@ -35,7 +35,7 @@
   right: 0;
   bottom: 0;
   overflow: hidden;
-  /* Height comes from JS (see about-me-section.tsx) measuring .contentStack's
+  /* Height comes from JS (see about-me.tsx) measuring .contentStack's
      actual rendered size — not a guessed viewport percentage. That's what
      makes the top/bottom padding symmetric and guarantees a fit on any
      screen, since the box is always exactly as tall as its content. */

@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import RetroNav from '../retro-nav/retro-nav';
 import SectionPanel from '../section-panel/section-panel';
-import { SECTION_ITEMS } from '../../../data/junk-items';
+import { SECTION_ITEMS } from '../../data/junk-items';
 import { setUrlHash } from '../../../shared/url-hash';
+import { RESUME_PATH } from '../../../shared/resume';
 import styles from './nav-section.module.css';
 
 interface HashEntry {
@@ -83,8 +84,7 @@ export default function NavSection() {
       <RetroNav
         items={[
           ...SECTION_ITEMS.map(({ id, title }) => ({ id, label: title })),
-          // Placeholder path — drop the real file at public/resume.pdf once sourced.
-          { id: 'download', label: 'Download CV', href: '/resume.pdf' },
+          { id: 'download', label: 'Download CV', href: RESUME_PATH },
         ]}
         openSectionId={selection.sectionId}
         onSelect={handleSelect}

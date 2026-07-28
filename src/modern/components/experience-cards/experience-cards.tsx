@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import styles from './experience-cards.module.css';
 import LazyImage from '../lazy-image/lazy-image';
-import { EXPERIENCE } from '../../../data/experience';
+import { EXPERIENCE } from '../../data/experience';
 import { POSTER_ASSEMBLE_END, POSTER_HOLD_END, HOLD_SHARE } from './experience-scroll';
 import experienceImage1 from '../../../assets/modern/images/expiriance-1.jpg';
 import experienceImage2 from '../../../assets/modern/images/experiance-2.jpg';
@@ -167,7 +167,7 @@ export default function ExperienceCards() {
                 <p className={styles.cardOverview}>{entry.overview}</p>
 
                 <ul className={styles.cardBulletList}>
-                  {/* Bullet strings carry authored <strong> markup (see src/data/experience.ts)
+                  {/* Bullet strings carry authored <strong> markup (see src/modern/data/experience.ts)
                       for the uppercase/red emphasis treatment — trusted static content, not
                       user input, so rendering it as HTML here is safe. */}
                   {entry.bullets.map((bullet) => (

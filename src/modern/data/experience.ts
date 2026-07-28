@@ -1,6 +1,6 @@
-import mcProLogo from '../assets/modern/images/mc-pro-logo.png';
-import viewbidLogo from '../assets/modern/images/viewbid-logo.png';
-import fiservLogo from '../assets/modern/images/fiserv-logo.png';
+import mcProLogo from '../../assets/modern/images/mc-pro-logo.png';
+import viewbidLogo from '../../assets/modern/images/viewbid-logo.png';
+import fiservLogo from '../../assets/modern/images/fiserv-logo.png';
 
 export interface ExperienceEntry {
   logoSrc: string;

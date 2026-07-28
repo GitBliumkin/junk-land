@@ -1,18 +1,18 @@
-import WelcomeSprite from '../retro/components/welcome-sprite/welcome-sprite';
-import NavSection from '../retro/components/nav-section/nav-section';
-import FlameBar from '../retro/components/flame-bar/flame-bar';
-import NavGif from '../retro/components/nav-gif/nav-gif';
-import uottawaLogo from '../assets/retro/images/uottawa-logo.png';
-import uottawaLogoOutline from '../assets/retro/images/uottawa-logo-outline.png';
-import myPhoto from '../assets/retro/images/my-photo.png';
-import myPhotoOutline from '../assets/retro/images/my-photo-outline.png';
-import javaLogo from '../assets/retro/images/java-logo.png';
-import tsLogo from '../assets/retro/images/ts-logo.png';
-import sqlLogo from '../assets/retro/images/sql-logo.png';
+import WelcomeSprite from '../components/welcome-sprite/welcome-sprite';
+import NavSection from '../components/nav-section/nav-section';
+import FlameBar from '../components/flame-bar/flame-bar';
+import NavGif from '../components/nav-gif/nav-gif';
+import uottawaLogo from '../../assets/retro/images/uottawa-logo.png';
+import uottawaLogoOutline from '../../assets/retro/images/uottawa-logo-outline.png';
+import myPhoto from '../../assets/retro/images/my-photo.png';
+import myPhotoOutline from '../../assets/retro/images/my-photo-outline.png';
+import javaLogo from '../../assets/retro/images/java-logo.png';
+import tsLogo from '../../assets/retro/images/ts-logo.png';
+import sqlLogo from '../../assets/retro/images/sql-logo.png';
 
-import officialSiteBadge from '../assets/retro/gifs/nav-side/official-site-badge.webp';
-import thanksForVisiting from '../assets/retro/gifs/nav-side/thanks-for-visiting.webp';
-import webmasterCrossing from '../assets/retro/gifs/nav-side/webmaster-crossing.webp';
+import officialSiteBadge from '../../assets/retro/gifs/nav-side/official-site-badge.webp';
+import thanksForVisiting from '../../assets/retro/gifs/nav-side/thanks-for-visiting.webp';
+import webmasterCrossing from '../../assets/retro/gifs/nav-side/webmaster-crossing.webp';
 
 export interface JunkItem {
   id: string;

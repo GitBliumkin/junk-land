@@ -1,6 +1,6 @@
-import styles from './Education.module.css';
-import uottawaLogo from '../../assets/modern/images/u-ottawa-logo.png';
-import contactImage from '../../assets/modern/images/contact-me.jpg';
+import styles from './education.module.css';
+import uottawaLogo from '../../../assets/modern/images/u-ottawa-logo.png';
+import contactImage from '../../../assets/modern/images/contact-me.jpg';
 
 // Both the heading and the logo are stencils cut into the same fixed photo
 // backdrop (see their CSS: background-clip: text on the heading, a

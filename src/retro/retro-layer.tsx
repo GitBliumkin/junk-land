@@ -1,8 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MotionConfig, correctParentTransform } from 'framer-motion';
-import { useJunkStore } from '../store/junk-store';
-import { JUNK_ITEMS } from '../data/junk-items';
+import { useJunkStore } from './store/junk-store';
+import { JUNK_ITEMS } from './data/junk-items';
 import TrashBin from './components/trash-bin/trash-bin';
 import DraggableJunk from './components/draggable-junk/draggable-junk';
 import CompletionExplosion from './components/completion-explosion/completion-explosion';

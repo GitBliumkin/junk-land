@@ -21,7 +21,7 @@
 
 /* background-attachment: fixed (not a normal <img>) — the same technique,
    same image, same background-size/position as Education's heading and
-   logo cutouts (see Education.module.css). That's what makes this read as
+   logo cutouts (see education.module.css). That's what makes this read as
    one motionless photo the whole time, sitting behind Education from the
    start and simply uncovered as its cream layer slides away, rather than a
    second copy of the photo that scrolls up into place on its own — a plain

@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import styles from './about-me-section.module.css';
-import aboutMeImage from '../../assets/modern/images/about-me.jpg';
+import styles from './about-me.module.css';
+import aboutMeImage from '../../../assets/modern/images/about-me.jpg';
 
 // TODO: swap in real bio copy.
 const ABOUT_TEXT = [
@@ -25,7 +25,7 @@ const REVEAL_SPRING = { stiffness: 1000, damping: 100 };
 // read as "full screen" before the next section started sliding in.
 const EXPAND_END = 0.6;
 
-export default function HeroSection() {
+export default function AboutMe() {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const glassBlockRef = useRef<HTMLDivElement>(null);
@@ -134,7 +134,7 @@ export default function HeroSection() {
           style={{ height: blockHeight }}
           // One-time entrance on page load — separate from the scroll-driven
           // height above, this just slides the panel up from below .stage's
-          // own overflow:hidden edge (see about-me-section.module.css), so it
+          // own overflow:hidden edge (see about-me.module.css), so it
           // reads as rising into place rather than simply being there.
           // initial/animate only plays once on mount, so scrolling back up to
           // this section later doesn't replay it.

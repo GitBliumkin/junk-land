@@ -1,6 +1,6 @@
 /* Tall like ExperienceCards' own .container: the extra height beyond
    .stage's 100vh is what gives this section a scroll-driven hold after it
-   finishes assembling (see TechStack.tsx's ASSEMBLE_END), so it sits fully
+   finishes assembling (see tech-stack.tsx's ASSEMBLE_END), so it sits fully
    revealed for a while before releasing — same sticky-pin-then-release
    mechanic ExperienceCards uses to hand off to this section in the first
    place, just applied again to hand off to Education underneath it.
@@ -9,7 +9,7 @@
    exact moment ExperienceCards' own pin releases — since .stage is this
    section's first child, that's also the earliest point its sticky
    containing block begins, so .stage sticks (and its header/list are
-   already fully assembled, sitting at rest — see TechStack.tsx) from that
+   already fully assembled, sitting at rest — see tech-stack.tsx) from that
    instant, not only once ExperienceCards' last card has fully scrolled
    past. z-index: 1 (ExperienceCards' .container sits at 2) keeps that last
    card painting on top for the overlapping 100vh, so this section's
@@ -25,7 +25,7 @@
 
 /* container-type: inline-size makes cqi units below resolve against this
    box's own width rather than the viewport — same convention as
-   about-me-section's .stage, so type/spacing scales consistently with this
+   about-me's .stage, so type/spacing scales consistently with this
    section's actual rendered width instead of drifting at odd viewport
    widths. */
 .stage {
@@ -91,7 +91,7 @@
 /* align-self: flex-start overrides .header's default item stretch — without
    it, this box stretched to the heading's full width (header's own width,
    since it's the widest line), so measuring its rendered edge in
-   TechStack.tsx returned the heading's width instead of this line's own,
+   tech-stack.tsx returned the heading's width instead of this line's own,
    much shorter, text. */
 .subtitle {
   align-self: flex-start;
@@ -104,7 +104,7 @@
 }
 
 /* Left edge lines up with the end of "Daily tools" — margin-left is
-   set inline from a measured value (see TechStack.tsx) since the header is
+   set inline from a measured value (see tech-stack.tsx) since the header is
    now a centered block and its width isn't a fixed/computable CSS length. */
 .list {
   list-style: none;

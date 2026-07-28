@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import type { SectionItem } from '../../../data/junk-items';
+import type { SectionItem } from '../../data/junk-items';
 import styles from './section-panel.module.css';
 
 const LOAD_DELAY = 0.6;

@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import styles from './ContactMe.module.css';
-import contactImage from '../../assets/modern/images/contact-me.jpg';
+import styles from './contact-me.module.css';
+import contactImage from '../../../assets/modern/images/contact-me.jpg';
 
 const LINKEDIN_URL = 'https://www.linkedin.com/in/nikita-bliumkin/';
 const GITHUB_URL = 'https://github.com/GitBliumkin';
