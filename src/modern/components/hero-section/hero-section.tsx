@@ -16,6 +16,15 @@ const ABOUT_TEXT = [
 // instead, which writes correctly — kept snappy so it still reads scroll-linked.
 const REVEAL_SPRING = { stiffness: 1000, damping: 100 };
 
+// This section is pinned (see .stage's position: sticky) for its own scroll
+// range, same mechanic as TechStack/ContactMe — [0, EXPAND_END] of that
+// pinned range is spent expanding the panel to full-screen, then it holds
+// at full size for the rest of the range before releasing the pin and
+// handing off to ExperienceCards. Without a hold, the panel used to reach
+// full screen at the exact instant the pin released, so it never actually
+// read as "full screen" before the next section started sliding in.
+const EXPAND_END = 0.6;
+
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -85,19 +94,27 @@ export default function HeroSection() {
     offset: ['start start', 'end end'],
   });
 
+  // Expanding (panel growth, masthead shrink, text reveal) happens over
+  // [0, EXPAND_END] of the pinned range; this remaps that sub-range to a
+  // full 0-1 so the existing per-element timings below don't need to know
+  // about the hold that follows — they just clamp at their fully-expanded
+  // state once raw progress passes EXPAND_END, for the rest of the pin.
+  const expandProgress = useTransform(scrollYProgress, (p) => Math.min(1, p / EXPAND_END));
+
   // The panel expands from its resting content height to the full stage
-  // height, so it always fully covers the viewport by the end of the scroll
-  // instead of stopping short and leaving a strip of the photo visible.
-  const blockHeight = useTransform(scrollYProgress, [0, 1], [collapsedHeight, stageHeight]);
+  // height, so it always fully covers the viewport by the end of the
+  // expand phase instead of stopping short and leaving a strip of the
+  // photo visible.
+  const blockHeight = useTransform(expandProgress, [0, 1], [collapsedHeight, stageHeight]);
 
   // Shrinking the masthead as you scroll frees up vertical room for the
   // about text, so the fully expanded panel doesn't need to out-grow the
   // viewport to fit everything on shorter screens without clipping.
-  const nameFontSize = useTransform(scrollYProgress, [0, 0.4], [nameFontPx, nameFontPx * 0.45]);
-  const roleFontSize = useTransform(scrollYProgress, [0, 0.4], [roleFontPx, roleFontPx * 0.75]);
+  const nameFontSize = useTransform(expandProgress, [0, 0.4], [nameFontPx, nameFontPx * 0.45]);
+  const roleFontSize = useTransform(expandProgress, [0, 0.4], [roleFontPx, roleFontPx * 0.75]);
 
-  const textOpacity = useSpring(useTransform(scrollYProgress, [0.35, 0.75], [0, 1]), REVEAL_SPRING);
-  const textY = useSpring(useTransform(scrollYProgress, [0.35, 0.75], [32, 0]), REVEAL_SPRING);
+  const textOpacity = useSpring(useTransform(expandProgress, [0.35, 0.75], [0, 1]), REVEAL_SPRING);
+  const textY = useSpring(useTransform(expandProgress, [0.35, 0.75], [32, 0]), REVEAL_SPRING);
 
   // Zero for as long as the panel is smaller than (or equal to) its content
   // — i.e. throughout the resting/top-aligned look — and only grows once

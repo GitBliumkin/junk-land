@@ -1,16 +1,25 @@
-/* Sits underneath TechStack's sticky stage the whole time (see
-   TechStack.module.css's .section/.stage) — no scroll-driven entrance of
-   its own, since it's already revealed the instant TechStack's pin
-   releases and slides away, not something that animates in on its own
-   timeline. Bone background (not ink) — this section deliberately breaks
-   from the rest of the page's dark theme to read as a distinct closing
-   note. min-height: 100vh (not just enough for its own content) so that
-   once scrolled all the way down, this section alone fills the screen —
-   otherwise, being shorter than the viewport, it'd leave TechStack's
-   sticky stage (still exiting above it) peeking in at the top. */
+/* Tall like TechStack's own .section: the extra height beyond .stage's
+   100vh is what gives this section a scroll-driven hold once it's fully
+   filling the screen, before releasing the pin and handing off to
+   ContactMe underneath it — same mechanic TechStack uses to hand off to
+   this section in the first place. No scroll-driven entrance of its own
+   though — it's already fully revealed the instant the pin engages, not
+   something that animates in on its own timeline. */
 .section {
   position: relative;
-  min-height: 100vh;
+  height: 160vh;
+}
+
+/* Bone background (not ink) — this section deliberately breaks from the
+   rest of the page's dark theme to read as a distinct closing note. height:
+   100vh (not just enough for its own content) so that this section alone
+   fills the screen the moment it pins — otherwise, being shorter than the
+   viewport, it'd leave TechStack's sticky stage (still exiting above it)
+   peeking in at the top. */
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
   display: flex;
   align-items: center;
   container-type: inline-size;
@@ -107,7 +116,7 @@
 }
 
 @media (max-width: 640px) {
-  .section {
+  .stage {
     /* Stacked layout puts .details, not the heading, against the bottom
        edge here, so the descender-space compensation above doesn't apply —
        back to equal padding on all sides. */

@@ -1,6 +1,11 @@
+/* Tall like TechStack's own .section: the extra height beyond .stage's
+   100vh is what gives this section a scroll-driven hold once the panel
+   finishes expanding to full-screen (see hero-section.tsx's EXPAND_END),
+   so it actually reads as full-screen for a while before releasing the pin
+   and handing off to ExperienceCards. */
 .hero {
   position: relative;
-  height: 200vh;
+  height: 260vh;
 }
 
 .stage {
@@ -107,7 +112,7 @@
 
 @media (max-width: 640px) {
   .hero {
-    height: 180vh;
+    height: 240vh;
   }
 
   .masthead {
