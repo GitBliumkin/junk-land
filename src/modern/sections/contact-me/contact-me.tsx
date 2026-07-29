@@ -6,8 +6,6 @@ import contactImage from '../../../assets/modern/images/contact-me.jpg';
 const LINKEDIN_URL = 'https://www.linkedin.com/in/nikita-bliumkin/';
 const GITHUB_URL = 'https://github.com/GitBliumkin';
 const EMAIL = 'n.bliumkin@gmail.com';
-const PHONE = '(343) 988-2229';
-const PHONE_HREF = 'tel:+13439882229';
 
 // This section is pinned (see .stage's position: sticky) for its own scroll
 // range, same mechanic as TechStack — [0, ASSEMBLE_END] of that pinned range
@@ -92,9 +90,6 @@ export default function ContactMe() {
               <div className={styles.contactInfo}>
                 <a href={`mailto:${EMAIL}`} className={styles.contactLink}>
                   {EMAIL}
-                </a>
-                <a href={PHONE_HREF} className={styles.contactLink}>
-                  {PHONE}
                 </a>
               </div>
             </motion.div>
