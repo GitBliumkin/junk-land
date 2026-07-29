@@ -1,12 +1,12 @@
 .section {
   position: relative;
-  height: 160vh;
+  height: 160svh;
 }
 
 .stage {
   position: sticky;
   top: 0;
-  height: 100vh;
+  height: 100svh;
   display: flex;
   align-items: center;
   container-type: inline-size;

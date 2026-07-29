@@ -5,7 +5,7 @@
    and handing off to ExperienceCards. */
 .hero {
   position: relative;
-  height: 260vh;
+  height: 260svh;
 }
 
 .stage {
@@ -13,7 +13,7 @@
   container-name: heroStage;
   position: sticky;
   top: 0;
-  height: 100vh;
+  height: 100svh;
   min-height: 480px;
   overflow: hidden;
   background: var(--modern-color-ink);
@@ -108,7 +108,7 @@
 
 @media (max-width: 640px) {
   .hero {
-    height: 240vh;
+    height: 240svh;
   }
 
   .masthead {

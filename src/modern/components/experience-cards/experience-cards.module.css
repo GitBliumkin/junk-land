@@ -1,5 +1,5 @@
 /* z-index: 2 (TechStack's .section sits at 1) — TechStack now overlaps the
-   last 100vh of this container (see its own margin-top) so its
+   last 100svh of this container (see its own margin-top) so its
    already-stuck content sits ready underneath, and this needs to keep
    painting on top through that overlap for the last card's exit to read as
    sliding away to reveal it, rather than the two visibly fighting over
@@ -7,14 +7,14 @@
 .container {
   position: relative;
   z-index: 2;
-  height: 360vh;
+  height: 360svh;
 }
 
 .stage {
   position: sticky;
   top: 0;
   z-index: 0;
-  height: 100vh;
+  height: 100svh;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -60,7 +60,7 @@
    from the viewport edge by construction. */
 .poster {
   flex: 0 0 100vw;
-  height: 100vh;
+  height: 100svh;
   container-type: inline-size;
   container-name: posterStage;
   display: flex;
@@ -317,6 +317,10 @@
 }
 
 @media (max-width: 640px) {
+  .container {
+    height: 260svh;
+  }
+
   .line {
     font-size: clamp(2rem, 16cqi, 6rem);
   }
@@ -330,17 +334,17 @@
   }
 
   .poster {
-    flex: 0 0 100vh;
+    flex: 0 0 100svh;
     width: 100%;
   }
 
-  /* Taller (was clamp(28rem, 78vh, 36rem)) so more of each card's content
-     fits without needing .cardBody's internal scroll — combined with
-     dropping the logo and stacking the header below, there's more room to
-     work with too. */
+  /* Taller still (was clamp(32rem, 92vh, 42rem)) — the first card's 6
+     bullets still overflowed the old 42rem cap on typical phone heights,
+     forcing .cardBody's internal scrollbar. svh instead of vh so this
+     doesn't shift as Safari's toolbar collapses mid-scroll. */
   .card {
     width: min(88vw, 26rem);
-    height: clamp(32rem, 92vh, 42rem);
+    height: clamp(32rem, 92svh, 50rem);
   }
 
   .cardLogo {
@@ -356,5 +360,32 @@
   .cardMeta {
     align-items: flex-start;
     text-align: left;
+  }
+
+  .cardBody {
+    gap: 0.75rem;
+    padding: clamp(1.1rem, 3.5vw, 1.5rem);
+  }
+
+  .cardTechStack {
+    padding-bottom: 0.85rem;
+  }
+
+  .cardOverview {
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+
+  .cardBulletList {
+    gap: 0.5rem;
+  }
+
+  .cardBulletList li {
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  .cardPageLink {
+    font-size: 1.2rem;
   }
 }

@@ -1,6 +1,6 @@
 .section {
   position: relative;
-  height: 200vh;
+  height: 200svh;
   background: var(--modern-color-ink);
 }
 
@@ -9,7 +9,7 @@
   top: 0;
   container-type: inline-size;
   container-name: contactStage;
-  height: 100vh;
+  height: 100svh;
   overflow: hidden;
 }
 

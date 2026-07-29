@@ -18,8 +18,8 @@
 .section {
   position: relative;
   z-index: 1;
-  margin-top: -100vh;
-  height: 220vh;
+  margin-top: -100svh;
+  height: 220svh;
   background: var(--modern-color-ink);
 }
 
@@ -33,7 +33,7 @@
   top: 0;
   container-type: inline-size;
   container-name: techStage;
-  height: 100vh;
+  height: 100svh;
   overflow: hidden;
 }
 
