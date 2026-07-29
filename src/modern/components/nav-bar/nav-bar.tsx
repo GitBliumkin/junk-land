@@ -114,12 +114,16 @@ export default function NavBar() {
   useEffect(() => {
     let idleTimer: ReturnType<typeof setTimeout>;
     const educationEl = document.getElementById('education');
+    const contactMeEl = document.getElementById('contact-me');
+
+    const isOverLightSection = (el: HTMLElement | null) => {
+      if (!el) return false;
+      const rect = el.getBoundingClientRect();
+      return rect.top <= 0 && rect.bottom > 0;
+    };
 
     const handleScroll = () => {
-      if (educationEl) {
-        const rect = educationEl.getBoundingClientRect();
-        setOnLightSection(rect.top <= 0 && rect.bottom > 0);
-      }
+      setOnLightSection(isOverLightSection(educationEl) || isOverLightSection(contactMeEl));
 
       if (dropdownOpen) return;
       setHidden(true);
